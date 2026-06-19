@@ -57,9 +57,45 @@ return {
       n = {
         -- second key is the lefthand side of the map
 
-        -- navigate buffer tabs
-        ["]b"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
-        ["[b"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+        ["gh"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" },
+        ["gl"] = false,
+
+        -- disable default explorer mappings
+        ["<Leader>e"] = false,
+        ["<Leader>o"] = false,
+                
+        -- toggle explorer and focus it (Ctrl+e)
+        ["<C-e>"] = {
+          function()
+            -- Only search windows in the current tab
+            for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+              local buf = vim.api.nvim_win_get_buf(win)
+              if vim.bo[buf].filetype == "neo-tree" then
+                -- Neo-tree is already open in this tab
+                if vim.api.nvim_get_current_win() == win then
+                  -- Currently focused on it → close
+                  vim.cmd.Neotree "close"
+                  return
+                else
+                  -- Focus the existing neo-tree window
+                  vim.api.nvim_set_current_win(win)
+                  return
+                end
+              end
+            end
+            -- Not found in current tab → open it
+            vim.cmd.Neotree "focus"
+          end,
+          desc = "Toggle Explorer Focus",
+        },
+
+
+        -- navigate buffer tabs and disable astro default
+        ["gb"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
+        ["gB"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
+        ["]b"] = false,
+        ["[b"] = false,
+
 
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
