@@ -63,7 +63,7 @@ return {
         -- disable default explorer mappings
         ["<Leader>e"] = false,
         ["<Leader>o"] = false,
-                
+
         -- toggle explorer and focus it (Ctrl+e)
         ["<C-e>"] = {
           function()
@@ -89,13 +89,17 @@ return {
           desc = "Toggle Explorer Focus",
         },
 
-
         -- navigate buffer tabs and disable astro default
         ["gb"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
         ["gB"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
         ["]b"] = false,
         ["[b"] = false,
 
+        -- grep across whole directory
+        ["g/"] = { function() require("snacks").picker.grep { hidden = true, ignored = true } end, desc = "Find words in all files" },
+
+        --Rename file
+        ["<F2>"] = { function() require("astrocore").rename_file() end, desc = "Rename file" },
 
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
