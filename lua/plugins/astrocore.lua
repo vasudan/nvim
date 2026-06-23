@@ -64,6 +64,9 @@ return {
         ["<Leader>e"] = false,
         ["<Leader>o"] = false,
 
+        -- disable shortcut to home screen
+        ["<Leader>h"] = false,
+
         -- toggle explorer and focus it (Ctrl+e)
         ["<C-e>"] = {
           function()
@@ -96,7 +99,10 @@ return {
         ["[b"] = false,
 
         -- grep across whole directory
-        ["g/"] = { function() require("snacks").picker.grep { hidden = true, ignored = true } end, desc = "Find words in all files" },
+        ["g/"] = {
+          function() require("snacks").picker.grep { hidden = true, ignored = true } end,
+          desc = "Find words in all files",
+        },
 
         --Rename file
         ["<F2>"] = { function() require("astrocore").rename_file() end, desc = "Rename file" },
@@ -120,4 +126,14 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    require("astrocore").setup(opts)
+    vim.api.nvim_create_user_command("Home", function()
+      if vim.bo.filetype == "snacks_dashboard" then
+        require("astrocore.buffer").close()
+      else
+        require("snacks").dashboard()
+      end
+    end, { desc = "Toggle the Home dashboard" })
+  end,
 }

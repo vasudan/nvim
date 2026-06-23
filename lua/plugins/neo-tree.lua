@@ -7,5 +7,9 @@ return {
     opts.window.mappings = opts.window.mappings or {}
     -- Map F2 to neo-tree's built-in rename command
     opts.window.mappings["<F2>"] = "rename"
+    opts.filesystem.filtered_items = {
+      visible = true,
+    }
   end,
 }
+
