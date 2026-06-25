@@ -67,42 +67,18 @@ return {
         -- disable shortcut to home screen
         ["<Leader>h"] = false,
 
-        -- toggle explorer and focus it (Ctrl+e)
-        ["<C-e>"] = {
-          function()
-            -- Only search windows in the current tab
-            for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-              local buf = vim.api.nvim_win_get_buf(win)
-              if vim.bo[buf].filetype == "neo-tree" then
-                -- Neo-tree is already open in this tab
-                if vim.api.nvim_get_current_win() == win then
-                  -- Currently focused on it → close
-                  vim.cmd.Neotree "close"
-                  return
-                else
-                  -- Focus the existing neo-tree window
-                  vim.api.nvim_set_current_win(win)
-                  return
-                end
-              end
-            end
-            -- Not found in current tab → open it
-            vim.cmd.Neotree "focus"
-          end,
-          desc = "Toggle Explorer Focus",
-        },
-
         -- navigate buffer tabs and disable astro default
         ["gb"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
         ["gB"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
         ["]b"] = false,
         ["[b"] = false,
 
-        -- grep across whole directory
-        ["g/"] = {
-          function() require("snacks").picker.grep { hidden = true, ignored = true } end,
-          desc = "Find words in all files",
+        -- Close other buffers
+        ["<Leader>bo"] = {
+          function() require("astrocore.buffer").close_all(true) end,
+          desc = "Close all buffers except current",
         },
+        ["<Leader>bc"] = false,
 
         --Rename file
         ["<F2>"] = { function() require("astrocore").rename_file() end, desc = "Rename file" },
