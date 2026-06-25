@@ -65,7 +65,11 @@ return {
     },
     -- mappings to be set up on attaching of a language server
     mappings = {
-      n = {},
+      n = {
+        ["gs"] = { function() vim.lsp.buf.signature_help() end, desc = "Signature help", cond = "textDocument/signatureHelp" },
+        ["gK"] = false
+      },
+
     },
   },
   specs = {

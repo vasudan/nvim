@@ -60,9 +60,9 @@ return {
         ["gh"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" },
         ["gl"] = false,
 
-        -- disable default explorer mappings
-        ["<Leader>e"] = false,
-        ["<Leader>o"] = false,
+        -- -- disable default explorer mappings
+        -- ["<Leader>e"] = false,
+        -- ["<Leader>o"] = false,
 
         -- disable shortcut to home screen
         ["<Leader>h"] = false,
