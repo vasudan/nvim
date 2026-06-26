@@ -1,10 +1,12 @@
-# AGENTS.md — Navigating this Neovim Configuration
+# Navigating this Neovim Configuration
 
 This document helps AI agents (and humans) quickly locate configuration sources and understand the layering in this [AstroNvim](https://astronvim.com) setup.  Use it to **minimise search churn** when debugging mappings, plugin behaviour, or keybinding conflicts.
 
 ---
 
 ## 1. Directory Map
+
+**User custom config**
 
 | Layer | Path | What lives here |
 |-------|------|-----------------|
@@ -14,8 +16,14 @@ This document helps AI agents (and humans) quickly locate configuration sources 
 | **User community** | [`lua/community.lua`](lua/community.lua) | AstroNvim community pack imports |
 | **User lazy setup** | [`lua/lazy_setup.lua`](lua/lazy_setup.lua) | `lazy.nvim` bootstrap and `mapleader` |
 | **Entry point** | [`init.lua`](init.lua) | Initialisation |
+
+
+**Upstream default config (read-only)**
+
+| Layer | Path | What lives here |
+|-------|------|-----------------|
 | **AstroNvim upstream** | `~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/` | The distro's *default* plugin specs and mappings |
-| **AstroNvim default mappings** | `…/astronvim/plugins/_astrocore_mappings.lua` | Global normal/terminal-mode keymaps |
+| **AstroNvim default mappings** | `~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/plugins/_astrocore_mappings.lua` | Default normal mode keymaps |
 | **Plugin source** | `~/.local/share/nvim/lazy/<plugin>/` | Actual plugin code (read-only; use for reference) |
 
 ---
@@ -25,21 +33,44 @@ This document helps AI agents (and humans) quickly locate configuration sources 
 ### 2.1. Global (normal-mode) keymaps
 
 1. AstroNvim [`_astrocore_mappings.lua`](~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/plugins/_astrocore_mappings.lua) sets the base.
-2. Some plugins (*smart-splits*) **overwrite** those base mappings via their `specs` block — look at [`~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/plugins/smart-splits.lua`](~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/plugins/smart-splits.lua).
+2. Some plugins (*smart-splits*) **overwrite** those base mappings via their `specs` block
+  - example for smart-splits:
+   ```lua
+      return {
+         "mrjones2014/smart-splits.nvim",
+         specs = {
+            {
+               "AstroNvim/astrocore",
+               opts = function(_, opts)
+                  local maps = opts.mappings
+                  maps.n["<C-H>"] = { function() require("smart-splits").move_cursor_left() end, desc = "Move to left split" }
+                  maps.n["<C-J>"] = { function() require("smart-splits").move_cursor_down() end, desc = "Move to below split" }
+                  maps.n["<C-K>"] = { function() require("smart-splits").move_cursor_up() end, desc = "Move to above split" }
+                  maps.n["<C-L>"] = { function() require("smart-splits").move_cursor_right() end, desc = "Move to right split" }
+                  maps.n["<C-Up>"] = { function() require("smart-splits").resize_up() end, desc = "Resize split up" }
+                  maps.n["<C-Down>"] = { function() require("smart-splits").resize_down() end, desc = "Resize split down" }
+                  maps.n["<C-Left>"] = { function() require("smart-splits").resize_left() end, desc = "Resize split left" }
+                  maps.n["<C-Right>"] = { function() require("smart-splits").resize_right() end, desc = "Resize split right" }
+               end,
+            },
+         }
+      }
+   ```
 3. User overrides live in:
    * [`lua/plugins/astrocore.lua`](lua/plugins/astrocore.lua) → `opts.mappings`
    * or any `specs` block inside a user plugin file that targets `AstroNvim/astrocore`.
-4. Raw overrides in [`lua/polish.lua`](lua/polish.lua) (runs last).
+4. Raw overrides in [`lua/polish.lua`](lua/polish.lua)
 
 ### 2.2. Buffer-local / window-local keymaps
 
-Some UIs (*snacks picker*, *neo-tree*, *toggleterm*) define **window-local** keymaps that should shadow globals.  The snacks picker defines its per-window maps in the **plugin source** defaults:
+Some UIs (*snacks picker*, *neo-tree*, *toggleterm*) define **window-local** keymaps that should shadow globals.  The snacks picker defines its per-window maps in the **plugin source** [defaults](~/.local/share/nvim/lazy/snacks.nvim/lua/snacks/picker/config/defaults.lua ):
 
-| Picker sub-window | Defaults file |
-|-------------------|---------------|
-| `input` | [`~/.local/share/nvim/lazy/snacks.nvim/lua/snacks/picker/config/defaults.lua`](~/.local/share/nvim/lazy/snacks.nvim/lua/snacks/picker/config/defaults.lua) → `win.input.keys` |
-| `list`  | same file → `win.list.keys` |
-| `preview` | same file → `win.preview.keys` |
+
+| Picker sub-window | Object            |
+|-------------------|-------------------|
+| `input`           | `win.input.keys`  |
+| `list`            | `win.list.keys`   |
+| `preview`         | `win.preview.keys`|
 
 **User overrides** go in [`lua/plugins/snacks.lua`](lua/plugins/snacks.lua) → `opts.picker.win.<subwindow>.keys`.
 
@@ -71,25 +102,7 @@ Key ones: `focus_input`, `focus_list`, `focus_preview`, `cycle_win`, `confirm`, 
 
 ---
 
-## 4. Common Plugin Config Locations
-
-| Plugin | User spec | Upstream defaults (reference) |
-|--------|-----------|-------------------------------|
-| astrocore | [`lua/plugins/astrocore.lua`](lua/plugins/astrocore.lua) | `…/astronvim/plugins/_astrocore_mappings.lua` |
-| astrolsp | [`lua/plugins/astrolsp.lua`](lua/plugins/astrolsp.lua) | `…/astronvim/plugins/astrolsp.lua` |
-| astroui | [`lua/plugins/astroui.lua`](lua/plugins/astroui.lua) | `…/astronvim/plugins/astroui.lua` |
-| snacks.nvim | [`lua/plugins/snacks.lua`](lua/plugins/snacks.lua) | `…/astronvim/plugins/snacks.lua` + `…/snacks.nvim/lua/snacks/picker/config/defaults.lua` |
-| neo-tree | [`lua/plugins/neo-tree.lua`](lua/plugins/neo-tree.lua) | `…/astronvim/plugins/neo-tree.lua` |
-| toggleterm | [`lua/plugins/toggleterm.lua`](lua/plugins/toggleterm.lua) | — |
-| conform | [`lua/plugins/conform.lua`](lua/plugins/conform.lua) | — |
-| treesitter | [`lua/plugins/treesitter.lua`](lua/plugins/treesitter.lua) | — |
-| mason | [`lua/plugins/mason.lua`](lua/plugins/mason.lua) | — |
-| user | [`lua/plugins/user.lua`](lua/plugins/user.lua) | — |
-| smart-splits | — (loaded by AstroNvim) | `…/astronvim/plugins/smart-splits.lua` |
-
----
-
-## 5. AstroNvim spec layering and lazy loading
+## 4. AstroNvim spec layering and lazy loading
 
 User plugin files in [`lua/plugins/`](lua/plugins/) return a `LazySpec` and are auto-loaded by `lazy.nvim`.  They can:
 
@@ -104,14 +117,15 @@ When hunting a config value, always check **three layers** in order:
 
 ---
 
-## 6. Quick Search Commands
+## 5. Quick Search Commands
 
 ```bash
 # Find all files referencing a keymap
 rg '<C-h>' lua/ ~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/
 
 # Find a plugin's default config
-ls ~/.local/share/nvim/lazy/<plugin>/lua/<plugin>/config/
+ls ~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/plugins/<plugin>
+ls ~/.local/share/nvim/lazy/<plugin>
 
 # Find all astrocore mappings (global)
 rg 'maps\.n\[' ~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/plugins/_astrocore_mappings.lua
