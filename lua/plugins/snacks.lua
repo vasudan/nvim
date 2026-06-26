@@ -16,7 +16,7 @@ return {
           { key = "'", action = "<Leader>f'", icon = get_icon("Bookmarks", 0, true), desc = "Bookmarks  " },
           { key = "s", action = "<Leader>Sl", icon = get_icon("Refresh", 0, true), desc = "Last Session  " },
         },
-        header = ''
+        header = "",
       },
       sections = {
         { section = "header", padding = 5 },
@@ -134,18 +134,15 @@ return {
         local maps = opts.mappings
         local snack_opts = require("astrocore").plugin_opts "snacks.nvim"
 
-        -- Snacks.dashboard mappins
-        maps.n["<Leader>h"] = {
-          function()
-            if vim.bo.filetype == "snacks_dashboard" then
-              require("astrocore.buffer").close()
-            else
-              require("snacks").dashboard()
-            end
-          end,
-          desc = "Home Screen",
-        }
-
+        -- disable shortcut to home screen because it messes up the buffer. Use :Home instead
+        maps.n["<Leader>h"] = false
+        vim.api.nvim_create_user_command("Home", function()
+          if vim.bo.filetype == "snacks_dashboard" then
+            require("astrocore.buffer").close()
+          else
+            require("snacks").dashboard()
+          end
+        end, { desc = "Toggle the Home dashboard" })
         -- Snacks.indent mappings
         maps.n["<Leader>u|"] =
           { function() require("snacks").toggle.indent():toggle() end, desc = "Toggle indent guides" }
@@ -211,7 +208,11 @@ return {
           maps.n["<Leader>fg"] = { function() require("snacks").picker.git_files() end, desc = "Find git files" }
           maps.n["<Leader>fh"] = { function() require("snacks").picker.help() end, desc = "Find help" }
           maps.n["<Leader>fk"] = { function() require("snacks").picker.keymaps() end, desc = "Find keymaps" }
-          vim.api.nvim_create_user_command("Keymap", function() require("snacks").picker.keymaps() end, { desc = "Open keymap picker" })
+          vim.api.nvim_create_user_command(
+            "Keymap",
+            function() require("snacks").picker.keymaps() end,
+            { desc = "Open keymap picker" }
+          )
           maps.n["<Leader>fm"] = { function() require("snacks").picker.man() end, desc = "Find man" }
           maps.n["<Leader>fn"] =
             { function() require("snacks").picker.notifications() end, desc = "Find notifications" }

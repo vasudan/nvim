@@ -60,13 +60,6 @@ return {
         ["gh"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" },
         ["gl"] = false,
 
-        -- -- disable default explorer mappings
-        -- ["<Leader>e"] = false,
-        -- ["<Leader>o"] = false,
-
-        -- disable shortcut to home screen
-        ["<Leader>h"] = false,
-
         -- navigate buffer tabs and disable astro default
         ["gb"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
         ["gB"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
@@ -101,15 +94,5 @@ return {
         -- ["<C-S>"] = false,
       },
     },
-  },
-  config = function(_, opts)
-    require("astrocore").setup(opts)
-    vim.api.nvim_create_user_command("Home", function()
-      if vim.bo.filetype == "snacks_dashboard" then
-        require("astrocore.buffer").close()
-      else
-        require("snacks").dashboard()
-      end
-    end, { desc = "Toggle the Home dashboard" })
-  end,
+  }
 }
