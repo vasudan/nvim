@@ -15,6 +15,16 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+local sysName = vim.loop.os_uname().sysname
+local isWin = sysName:find 'Windows' and true or false
+if isWin then
+    if vim.fn.executable("pwsh") == 1 then
+        vim.opt.shell = "pwsh" --"pwsh" for 7.x if installed
+    else
+        vim.opt.shell = "powershell" --"powershell" for 5.x
+    end
+end
+
 -- validate that lazy is available
 if not pcall(require, "lazy") then
   -- stylua: ignore
