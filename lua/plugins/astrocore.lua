@@ -60,11 +60,8 @@ return {
         ["gh"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" },
         ["gl"] = false,
 
-        -- navigate buffer tabs and disable astro default
-        ["gb"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
-        ["gB"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
-        ["]b"] = false,
-        ["[b"] = false,
+        ["]b"] = { function() require("astrocore.buffer").nav(vim.v.count1) end, desc = "Next buffer" },
+        ["[b"] = { function() require("astrocore.buffer").nav(-vim.v.count1) end, desc = "Previous buffer" },
 
         -- Close other buffers
         ["<Leader>bo"] = {

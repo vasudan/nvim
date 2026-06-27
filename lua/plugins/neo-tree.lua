@@ -22,10 +22,8 @@ return {
     opts.window.mappings["<S-CR>"] = false
     opts.window.mappings["O"] = "system_open"
 
-    opts.window.mappings["[b"] = false
-    opts.window.mappings["]b"] = false
-    opts.window.mappings["gB"] = "prev_source"
-    opts.window.mappings["gb"] = "next_source"
+    opts.window.mappings["]b"] = "next_source"
+    opts.window.mappings["[b"] = "prev_source"
 
 
     opts.filesystem.filtered_items = {
@@ -42,6 +40,7 @@ return {
         local maps = opts.mappings
         -- disable default explorer mappings
         maps.n["<Leader>o"] = false
+        -- if in neo-tree, close it. If in a buffer, open the neo-tree and focus that file
         maps.n["<Leader>e"] = {
           function()
             -- Only search windows in the current tab
