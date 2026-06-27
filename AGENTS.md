@@ -18,13 +18,13 @@ This document helps AI agents (and humans) quickly locate configuration sources 
 | **Entry point** | [`init.lua`](init.lua) | Initialisation |
 
 
-**Upstream default config (read-only)**
+**Upstream default config (read-only, use for reference)**
 
 | Layer | Path | What lives here |
 |-------|------|-----------------|
-| **AstroNvim upstream** | `~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/` | The distro's *default* plugin specs and mappings |
+| **AstroNvim plugin configuration** | `~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/plugins/<plugin>` | The distro's *default* plugin specs and mappings |
 | **AstroNvim default mappings** | `~/.local/share/nvim/lazy/AstroNvim/lua/astronvim/plugins/_astrocore_mappings.lua` | Default normal mode keymaps |
-| **Plugin source** | `~/.local/share/nvim/lazy/<plugin>/` | Actual plugin code (read-only; use for reference) |
+| **Plugin source and default plugin config** | `~/.local/share/nvim/lazy/<plugin>/` | Actual plugin code |
 
 ---
 

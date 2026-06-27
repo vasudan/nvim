@@ -3,9 +3,31 @@ return {
   "nvim-neo-tree/neo-tree.nvim",
   opts = function(_, opts)
 
+    -- When the rename/filter popup input is ready, make <Esc> return to
+    -- normal mode instead of closing the popup entirely.
+    if not opts.event_handlers then opts.event_handlers = {} end
+    table.insert(opts.event_handlers, {
+      event = "neo_tree_popup_input_ready",
+      ---@param args { bufnr: integer, winid: integer }
+      handler = function(args)
+        vim.keymap.set("i", "<esc>", vim.cmd.stopinsert, { noremap = true, buffer = args.bufnr })
+      end,
+    })
+
     opts.window.mappings["<F2>"] = "rename"
+
     -- Disable <space> in neo-tree so it doesn't steal the leader key.
     opts.window.mappings["<space>"] = false
+
+    opts.window.mappings["<S-CR>"] = false
+    opts.window.mappings["O"] = "system_open"
+
+    opts.window.mappings["[b"] = false
+    opts.window.mappings["]b"] = false
+    opts.window.mappings["gB"] = "prev_source"
+    opts.window.mappings["gb"] = "next_source"
+
+
     opts.filesystem.filtered_items = {
       visible = true,
     }
