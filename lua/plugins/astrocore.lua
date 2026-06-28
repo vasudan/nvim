@@ -9,6 +9,9 @@ return {
   ---@type AstroCoreOpts
   opts = {
     -- Configure core features of AstroNvim
+    autocmds = {
+      auto_quit = false, -- prevent NeoVim from quitting when all file buffers are closed
+    },
     features = {
       large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
       autopairs = true, -- enable autopairs at start
@@ -56,6 +59,7 @@ return {
       -- first key is the mode
       n = {
         -- second key is the lefthand side of the map
+        ["<C-Q>"] = false, -- Quit using <Leader Q> instead
 
         ["gh"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" },
         ["gl"] = false,
