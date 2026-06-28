@@ -15,23 +15,6 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-local sysName = vim.loop.os_uname().sysname
-local isWin = sysName:find 'Windows' and true or false
-if isWin then
-  -- All of these options are required to make powershell work
-  vim.opt.shellxquote = ''
-  vim.opt.shellquote = ''
-  vim.opt.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command '
-	vim.opt.shellpipe = '| Out-File -Encoding UTF8 %s'
-	vim.opt.shellredir = '| Out-File -Encoding UTF8 %s'
-  if vim.fn.executable("pwsh") == 1 then
-    vim.opt.shell = "pwsh" --"pwsh" for 7.x if installed
-    vim.opt.shellcmdflag = vim.opt.shellcmdflag + " $PSStyle.OutputRendering = 'PlainText';"
-  else
-    vim.opt.shell = "powershell" --"powershell" for 5.x
-  end
-end
-
 -- validate that lazy is available
 if not pcall(require, "lazy") then
   -- stylua: ignore
@@ -40,5 +23,6 @@ if not pcall(require, "lazy") then
   vim.cmd.quit()
 end
 
+require "win_term_setup" -- This needs to be called before lazy_setup so toggle-term uses the right shell.
 require "lazy_setup"
 require "polish"
