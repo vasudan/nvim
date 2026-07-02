@@ -175,8 +175,42 @@ return {
               function() require("snacks").picker.git_log { current_file = true, follow = true } end,
               desc = "Git commits (current file)",
             }
-            maps.n["<Leader>gt"] = { function() require("snacks").picker.git_status() end, desc = "Git status" }
-            maps.n["<Leader>gT"] = { function() require("snacks").picker.git_stash() end, desc = "Git stash" }
+            maps.n["<Leader>gs"] = { function() require("snacks").picker.git_stash() end, desc = "Git stash" }
+            maps.n["<Leader>gS"] = {
+              function()
+                vim.ui.input({ prompt = "Stash message (optional): " }, function(msg)
+                  local cmd = { "git", "stash", "push" }
+                  if msg and msg:match("%S") then
+                    vim.list_extend(cmd, { "-m", msg })
+                  end
+                  vim.fn.jobstart(cmd, {
+                    on_exit = function(_, code)
+                      if code == 0 then
+                        vim.notify("Stash saved", vim.log.levels.INFO)
+                      else
+                        vim.notify("Stash failed", vim.log.levels.ERROR)
+                      end
+                    end,
+                  })
+                end)
+              end,
+              desc = "Git stash push",
+            }
+            vim.api.nvim_create_user_command("Stash", function(opts)
+              local cmd = { "git", "stash", "push" }
+              if opts.args ~= "" then
+                vim.list_extend(cmd, { "-m", opts.args })
+              end
+              vim.fn.jobstart(cmd, {
+                on_exit = function(_, code)
+                  if code == 0 then
+                    vim.notify("Stash saved", vim.log.levels.INFO)
+                  else
+                    vim.notify("Stash failed", vim.log.levels.ERROR)
+                  end
+                end,
+              })
+            end, { desc = "Git stash push", nargs = "?" })
           end
           maps.n["<Leader>f<CR>"] =
             { function() require("snacks").picker.resume() end, desc = "Resume previous search" }
