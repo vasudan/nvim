@@ -144,6 +144,8 @@ return {
         { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close diff view" } },
         { "n", "<cr>", actions.select_entry, { desc = "Open diff" } },
         { "n", "o", actions.goto_file_edit, { desc = "Go to file" } },
+        { "n", "c", "<Cmd>Commit<CR>", { desc = "Git commit" } },
+        { "n", "p", "<Cmd>Push<CR>", { desc = "Git push" } },
         { "n", "R", actions.refresh_files, { desc = "Refresh" } },
         { "n", "<tab>", actions.toggle_stage_entry, { desc = "Stage/unstage" } },
         { "n", "S", actions.stage_all, { desc = "Stage all" } },
