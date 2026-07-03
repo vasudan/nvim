@@ -25,4 +25,5 @@ end
 
 require "win_term_setup" -- This needs to be called before lazy_setup so toggle-term uses the right shell.
 require "lazy_setup"
+require "git"
 require "polish"
