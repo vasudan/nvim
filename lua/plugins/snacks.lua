@@ -42,29 +42,28 @@ return {
     }
 
     -- configure picker and `vim.ui.select`
-    opts.picker = {
-      ui_select = true,
-      win = {
-        input = {
-          keys = {
-            ["<C-h>"] = { "focus_list", mode = { "i", "n" } },
-            ["<C-l>"] = { "focus_preview", mode = { "i", "n" } },
-          },
-        },
-        list = {
-          keys = {
-            ["<C-h>"] = "focus_input",
-            ["<C-l>"] = "focus_preview",
-          },
-        },
-        preview = {
-          keys = {
-            ["<C-h>"] = "focus_list",
-            ["<C-l>"] = "focus_input",
-          },
+    opts.picker = opts.picker or {}
+    opts.picker.ui_select = true
+    opts.picker.win = vim.tbl_deep_extend("force", opts.picker.win or {}, {
+      input = {
+        keys = {
+          ["<C-h>"] = { "focus_list", mode = { "i", "n" } },
+          ["<C-l>"] = { "focus_preview", mode = { "i", "n" } },
         },
       },
-    }
+      list = {
+        keys = {
+          ["<C-h>"] = "focus_input",
+          ["<C-l>"] = "focus_preview",
+        },
+      },
+      preview = {
+        keys = {
+          ["<C-h>"] = "focus_list",
+          ["<C-l>"] = "focus_input",
+        },
+      },
+    })
 
     opts.indent = {
       indent = { char = "▏" },

@@ -25,7 +25,7 @@ return {
   specs = {
     {
       "AstroNvim/astrocore",
-      opts = function(_, astro_opts)
+      opts = function(_, opts)
         local function select_terminal()
           local terminals = terms.get_all()
           if terminals == 0 then return utils.notify("No toggleterms are open yet", "info") end
@@ -44,7 +44,7 @@ return {
           end)
         end
 
-        astro_opts.mappings.n["<Leader>ts"] = { select_terminal, desc = "Select terminal" }
+        opts.mappings.n["<Leader>ts"] = { select_terminal, desc = "Select terminal" }
       end,
     },
   },
