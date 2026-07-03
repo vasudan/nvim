@@ -11,9 +11,9 @@ return {
         keys = {
           { key = "n", action = "<Leader>n", icon = get_icon("FileNew", 0, true), desc = "New File  " },
           { key = "f", action = "<Leader>ff", icon = get_icon("Search", 0, true), desc = "Find File  " },
-          { key = "o", action = "<Leader>fo", icon = get_icon("DefaultFile", 0, true), desc = "Recents  " },
           { key = "w", action = "<Leader>fw", icon = get_icon("WordFile", 0, true), desc = "Find Word  " },
           { key = "'", action = "<Leader>f'", icon = get_icon("Bookmarks", 0, true), desc = "Bookmarks  " },
+          { key = "o", action = "<Leader>Sf", icon = get_icon("DefaultFile", 0, true), desc = "Open Session  " },
           { key = "s", action = "<Leader>Sl", icon = get_icon("Refresh", 0, true), desc = "Last Session  " },
         },
         header = "",
@@ -167,50 +167,19 @@ return {
           if vim.fn.executable "git" == 1 then
             maps.n["<Leader>g"] = vim.tbl_get(opts, "_map_sections", "g")
             maps.n["<Leader>gb"] = { function() require("snacks").picker.git_branches() end, desc = "Git branches" }
-            maps.n["<Leader>gc"] = {
-              function() require("snacks").picker.git_log() end,
-              desc = "Git commits (repository)",
-            }
-            maps.n["<Leader>gC"] = {
+
+            -- disable astronvim defaults
+            maps.n["<Leader>gc"] = false
+            maps.n["<Leader>gC"] = false
+            maps.n["<Leader>gl"] = {
               function() require("snacks").picker.git_log { current_file = true, follow = true } end,
-              desc = "Git commits (current file)",
+              desc = "Git log (current file)",
+            }
+            maps.n["<Leader>gL"] = {
+              function() require("snacks").picker.git_log() end,
+              desc = "Git log (repository)",
             }
             maps.n["<Leader>gs"] = { function() require("snacks").picker.git_stash() end, desc = "Git stash" }
-            maps.n["<Leader>gS"] = {
-              function()
-                vim.ui.input({ prompt = "Stash message (optional): " }, function(msg)
-                  local cmd = { "git", "stash", "push" }
-                  if msg and msg:match("%S") then
-                    vim.list_extend(cmd, { "-m", msg })
-                  end
-                  vim.fn.jobstart(cmd, {
-                    on_exit = function(_, code)
-                      if code == 0 then
-                        vim.notify("Stash saved", vim.log.levels.INFO)
-                      else
-                        vim.notify("Stash failed", vim.log.levels.ERROR)
-                      end
-                    end,
-                  })
-                end)
-              end,
-              desc = "Git stash push",
-            }
-            vim.api.nvim_create_user_command("Stash", function(opts)
-              local cmd = { "git", "stash", "push" }
-              if opts.args ~= "" then
-                vim.list_extend(cmd, { "-m", opts.args })
-              end
-              vim.fn.jobstart(cmd, {
-                on_exit = function(_, code)
-                  if code == 0 then
-                    vim.notify("Stash saved", vim.log.levels.INFO)
-                  else
-                    vim.notify("Stash failed", vim.log.levels.ERROR)
-                  end
-                end,
-              })
-            end, { desc = "Git stash push", nargs = "?" })
           end
           maps.n["<Leader>f<CR>"] =
             { function() require("snacks").picker.resume() end, desc = "Resume previous search" }

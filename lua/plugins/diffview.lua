@@ -169,8 +169,10 @@ return {
           -- disable astrocore defaults
           n = {
             ["<Leader>gt"] = false,
+            ["<Leader>gT"] = false,
             ["<Leader>gg"] = false,
             ["<Leader>tl"] = false,
+            ["<Leader>gd"] = false,
           },
         },
       },

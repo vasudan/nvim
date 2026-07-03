@@ -21,8 +21,25 @@ local git_push = function()
   end
 end
 
+local git_stash = function()
+  vim.ui.input({ prompt = "Stash message (optional): " }, function(msg)
+    local cmd = { "git", "stash", "push" }
+    if msg and msg:match "%S" then vim.list_extend(cmd, { "-m", msg }) end
+    vim.fn.jobstart(cmd, {
+      on_exit = function(_, code)
+        if code == 0 then
+          vim.notify("Stash saved", vim.log.levels.INFO)
+        else
+          vim.notify("Stash failed", vim.log.levels.ERROR)
+        end
+      end,
+    })
+  end)
+end
+
 vim.api.nvim_create_user_command("Commit", git_commit, { desc = "Git commit with message prompt" })
 vim.api.nvim_create_user_command("Push", git_push, { desc = "Git push with confirmation" })
-vim.keymap.set('n', "<Leader>gmc", git_commit, { desc = "Git commit" })
-vim.keymap.set('n', "<Leader>gmp", git_push, { desc = "Git push" })
-vim.keymap.set('n', '<Leader>gm',  "<Nop>", { desc = "Git Commit/Push" }) 
+vim.api.nvim_create_user_command("Stash", git_stash, { desc = "Git stash push", nargs = "?" })
+vim.keymap.set("n", "<Leader>gc", git_commit, { desc = "Git commit" })
+vim.keymap.set("n", "<Leader>gp", git_push, { desc = "Git push" })
+vim.keymap.set("n", "<Leader>gS", git_push, { desc = "Git stash push" })
