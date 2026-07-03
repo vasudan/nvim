@@ -58,8 +58,9 @@ return {
     mappings = {
       -- first key is the mode
       n = {
-        -- second key is the lefthand side of the map
-        ["<C-Q>"] = false, -- Quit using <Leader Q> instead
+        -- Quit using :qa instead. Its safer this way,
+        ["<C-Q>"] = false,
+        ["<Leader>Q"] = false,
 
         ["gh"] = { function() vim.diagnostic.open_float() end, desc = "Hover diagnostics" },
         ["gl"] = false,
