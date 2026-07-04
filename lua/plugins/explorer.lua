@@ -37,7 +37,7 @@ return {
                 ["H"] = { "toggle_hidden", desc = "Toggle hidden files" },
                 ["Z"] = { "explorer_close_all", desc = "Collapse all directories" },
 
-                -- By default these controls will focus the preview. In this case, I want to select the buffer
+                -- By default these controls will focus the preview. In this case, I want to select the file buffer
                 ["<C-h>"] = false,
                 ["<C-l>"] = false,
 

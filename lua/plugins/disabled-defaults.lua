@@ -5,5 +5,6 @@ return {
   { "max397574/better-escape.nvim", enabled = false },
   { "folke/todo-comments.nvim", enabled = false },
   { "L3MON4D3/LuaSnip", enabled = false },
-  { "nvim-neo-tree/neo-tree.nvim", enabled = false }
+  { "nvim-neo-tree/neo-tree.nvim", enabled = false },
+  { "rcarriga/nvim-dap-ui", enabled = false },
 }

@@ -5,6 +5,7 @@ return {
   opts = function(_, opts)
     local get_icon = require("astroui").get_icon
     local buf_utils = require "astrocore.buffer"
+    vim.api.nvim_set_hl(0, "SnacksPickerGitStatusUntracked", { link = "Added" })
 
     opts.dashboard = {
       preset = {
