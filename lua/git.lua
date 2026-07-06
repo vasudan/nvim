@@ -11,6 +11,14 @@ local git_commit = function()
 end
 
 
+local git_fetch = function()
+  local result = vim.fn.systemlist { "git", "fetch" }
+  if vim.v.shell_error ~= 0 then
+    vim.notify("git fetch failed:\n" .. table.concat(result, "\n"), vim.log.levels.ERROR)
+    return
+  end
+  vim.notify("git fetch:\n" .. table.concat(result, "\n"), vim.log.levels.INFO)
+end
 local git_pull = function()
   local result = vim.fn.systemlist { "git", "pull" }
   if vim.v.shell_error ~= 0 then
@@ -47,10 +55,12 @@ local git_stash = function()
   end)
 end
 
-vim.api.nvim_create_user_command("Commit", git_commit, { desc = "Git commit with message prompt" })
-vim.api.nvim_create_user_command("Push", git_push, { desc = "Git push with confirmation" })
+vim.api.nvim_create_user_command("Fetch", git_fetch, { desc = "Git fetch" })
+vim.api.nvim_create_user_command("Commit", git_commit, { desc = "Git commit" })
+vim.api.nvim_create_user_command("Push", git_push, { desc = "Git push" })
 vim.api.nvim_create_user_command("Pull", git_pull, { desc = "Git pull" })
 vim.api.nvim_create_user_command("Stash", git_stash, { desc = "Git stash push", nargs = "?" })
+vim.keymap.set("n", "<Leader>gf", git_fetch, { desc = "Git fetch" })
 vim.keymap.set("n", "<Leader>gc", git_commit, { desc = "Git commit" })
 vim.keymap.set("n", "<Leader>gp", git_push, { desc = "Git push" })
 vim.keymap.set("n", "<Leader>gP", git_pull, { desc = "Git pull" })
