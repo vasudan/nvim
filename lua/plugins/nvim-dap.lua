@@ -1,6 +1,29 @@
 return {
   "mfussenegger/nvim-dap",
   lazy = true,
+  opts = function()
+    local dap = require("dap")
+    dap.listeners.on_config["rust-build"] = function(config)
+      -- Only build for Rust projects (detected by Cargo.toml in project root)
+      if config.request == "launch" and vim.fn.findfile("Cargo.toml", ".;") ~= "" then
+        vim.notify("Building Rust project with cargo...", vim.log.levels.INFO)
+        local co = coroutine.running()
+        vim.fn.jobstart({ "cargo", "build" }, {
+          on_exit = function(_, exit_code)
+            if exit_code == 0 then
+              vim.notify("cargo build succeeded", vim.log.levels.INFO)
+              coroutine.resume(co, config)
+            else
+              vim.notify("cargo build failed! Debug session aborted.", vim.log.levels.ERROR)
+              coroutine.resume(co, require("dap").ABORT)
+            end
+          end,
+        })
+        return coroutine.yield()
+      end
+      return config
+    end
+  end,
   specs = {
     {
       "AstroNvim/astrocore",

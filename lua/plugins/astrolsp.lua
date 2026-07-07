@@ -66,9 +66,29 @@ return {
     -- mappings to be set up on attaching of a language server
     mappings = {
       n = {
-        ["gK"] = { function() vim.lsp.buf.signature_help() end, desc = "Signature help", cond = "textDocument/signatureHelp" },
-      },
+        ["gK"] = {
+          function() vim.lsp.buf.signature_help() end,
+          desc = "Signature help",
+          cond = "textDocument/signatureHelp",
+        },
+        ["<Leader>li"] = { function() vim.lsp.buf.implementation() end, desc = "Show implementations" },
+        ["<Leader>lt"] = { function() vim.lsp.buf.type_definition() end, desc = "Show type definition" },
 
+        -- use NullLsInfo
+        ["<Leader>lI"] = false,
+
+        ["<Leader>lr"] = {
+          function() vim.lsp.buf.references() end,
+          desc = "Search references",
+          cond = "textDocument/references",
+        },
+
+        ["<Leader>ln"] = {
+          function() vim.lsp.buf.rename() end,
+          desc = "Rename current symbol",
+          cond = "textDocument/rename",
+        },
+      },
     },
   },
   specs = {

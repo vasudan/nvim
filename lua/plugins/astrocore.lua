@@ -76,8 +76,8 @@ return {
         },
         ["<Leader>bc"] = false,
 
-        --Rename file
-        ["<F2>"] = { function() require("astrocore").rename_file() end, desc = "Rename file" },
+        -- use LspInformation
+        ["<Leader>li"] = false,
 
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {
