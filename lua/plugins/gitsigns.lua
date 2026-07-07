@@ -28,9 +28,7 @@ return {
           maps[mode][prefix] = { desc = get_icon("Git", 1, true) .. "Git" }
         end
 
-        maps.n[prefix .. "b"] = { function() require("gitsigns").blame_line() end, desc = "View Git blame" }
-        maps.n[prefix .. "B"] =
-          { function() require("gitsigns").blame_line { full = true } end, desc = "View full Git blame" }
+        maps.n[prefix .. "a"] = { function() require("gitsigns").blame_line({ full = true }) end, desc = "View Git blame (annotate)" }
         -- maps.n[prefix .. "p"] = { function() require("gitsigns").preview_hunk_inline() end, desc = "Preview Git hunk" }
         -- maps.n[prefix .. "r"] = { function() require("gitsigns").reset_hunk() end, desc = "Reset Git hunk" }
         -- maps.v[prefix .. "r"] = {

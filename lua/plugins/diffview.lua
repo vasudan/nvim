@@ -146,6 +146,7 @@ return {
         { "n", "o", actions.goto_file_edit, { desc = "Go to file" } },
         { "n", "c", "<Cmd>Commit<CR>", { desc = "Git commit" } },
         { "n", "p", "<Cmd>Push<CR>", { desc = "Git push" } },
+        { "n", "P", "<Cmd>Pull<CR>", { desc = "Git pull" } },
         { "n", "R", actions.refresh_files, { desc = "Refresh" } },
         { "n", "<tab>", actions.toggle_stage_entry, { desc = "Stage/unstage" } },
         { "n", "S", actions.stage_all, { desc = "Stage all" } },
