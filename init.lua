@@ -49,6 +49,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 
 -- File
 vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "Write" })
+vim.keymap.set("n", "<leader>n", "<cmd>enew<CR>", { desc = "New file" })
 vim.keymap.set("n", "<leader>q", "<cmd>close<CR>", { desc = "Quit buffer" })
 
 -- Clear search highlights with Escape

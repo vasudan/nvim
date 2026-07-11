@@ -76,16 +76,15 @@ return {
   {
     "folke/snacks.nvim",
     keys = {
-      { "n", "<Leader>go", function() require("snacks").gitbrowse() end, desc = "Git browse (open)" },
-      { "n", "<Leader>gb", function() require("snacks").picker.git_branches() end, desc = "Git branches" },
+      { "<Leader>go", function() require("snacks").gitbrowse() end, desc = "Git browse (open)" },
+      { "<Leader>gb", function() require("snacks").picker.git_branches() end, desc = "Git branches" },
       {
-        "n",
         "<Leader>gl",
         function() require("snacks").picker.git_log { current_file = true, follow = true } end,
         "Git log (current file)",
       },
-      { "n", "<Leader>gL", function() require("snacks").picker.git_log() end, desc = "Git log (repository)" },
-      { "n", "<Leader>gs", function() require("snacks").picker.git_stash() end, desc = "Git stash" },
+      { "<Leader>gL", function() require("snacks").picker.git_log() end, desc = "Git log (repository)" },
+      { "<Leader>gs", function() require("snacks").picker.git_stash() end, desc = "Git stash" },
     },
   },
   {
@@ -116,12 +115,17 @@ return {
           vim.keymap.set(mode, l, r, keys)
         end
         local prefix = "<Leader>g"
-        map("n", prefix .. "a", function() gitsigns.blame_line { full = true } end, { desc = "View Git blame (annotate)" })
-        map("n", prefix .. "gf", git_fetch, { desc = "Git fetch" })
-        map("n", prefix .. "gc", git_commit, { desc = "Git commit" })
-        map("n", prefix .. "gp", git_push, { desc = "Git push" })
-        map("n", prefix .. "gP", git_pull, { desc = "Git pull" })
-        map("n", prefix .. "gS", git_push, { desc = "Git stash push" })
+        map(
+          "n",
+          prefix .. "a",
+          function() gitsigns.blame_line { full = true } end,
+          { desc = "View Git blame (annotate)" }
+        )
+        map("n", prefix .. "f", git_fetch, { desc = "Git fetch" })
+        map("n", prefix .. "c", git_commit, { desc = "Git commit" })
+        map("n", prefix .. "p", git_push, { desc = "Git push" })
+        map("n", prefix .. "P", git_pull, { desc = "Git pull" })
+        map("n", prefix .. "S", git_push, { desc = "Git stash push" })
         -- maps.n[prefix .. "p"] = { function() gitsigns.preview_hunk_inline() end, desc = "Preview Git hunk" }
         -- maps.n[prefix .. "r"] = { function() gitsigns.reset_hunk() end, desc = "Reset Git hunk" }
         -- maps.v[prefix .. "r"] = {
@@ -194,7 +198,7 @@ return {
     opts = {
       diff_binaries = false,
       enhanced_diff_hl = true, -- Better diff highlighting
-      use_icons = true,
+      use_icons = false,
       show_help_hints = true,
       watch_index = true,
       icons = {
@@ -260,66 +264,16 @@ return {
           { "n", "[b", function() require("diffview.actions").select_prev_entry() end, { desc = "Previous file" } },
 
           -- Conflict resolution
-          {
-            "n",
-            "[x",
-            function() require("diffview.actions").prev_conflict() end,
-            { desc = "In the merge-tool: jump to the previous conflict" },
-          },
-          {
-            "n",
-            "]x",
-            function() require("diffview.actions").next_conflict() end,
-            { desc = "In the merge-tool: jump to the next conflict" },
-          },
-          {
-            "n",
-            "<leader>co",
-            function() require("diffview.actions").conflict_choose "ours" end,
-            { desc = "Choose the OURS version of a conflict" },
-          },
-          {
-            "n",
-            "<leader>ct",
-            function() require("diffview.actions").conflict_choose "theirs" end,
-            { desc = "Choose the THEIRS version of a conflict" },
-          },
-          {
-            "n",
-            "<leader>cb",
-            function() require("diffview.actions").conflict_choose "base" end,
-            { desc = "Choose the BASE version of a conflict" },
-          },
-          {
-            "n",
-            "<leader>ca",
-            function() require("diffview.actions").conflict_choose "all" end,
-            { desc = "Choose all the versions of a conflict" },
-          },
-          {
-            "n",
-            "<leader>cO",
-            function() require("diffview.actions").conflict_choose_all "ours" end,
-            { desc = "Choose the OURS version of a conflict for the whole file" },
-          },
-          {
-            "n",
-            "<leader>cT",
-            function() require("diffview.actions").conflict_choose_all "theirs" end,
-            { desc = "Choose the THEIRS version of a conflict for the whole file" },
-          },
-          {
-            "n",
-            "<leader>cB",
-            function() require("diffview.actions").conflict_choose_all "base" end,
-            { desc = "Choose the BASE version of a conflict for the whole file" },
-          },
-          {
-            "n",
-            "<leader>cA",
-            function() require("diffview.actions").conflict_choose_all "all" end,
-            { desc = "Choose all the versions of a conflict for the whole file" },
-          },
+          { "n", "[x", function() require("diffview.actions").prev_conflict() end, { desc = "In the merge-tool: jump to the previous conflict" } },
+          { "n", "]x", function() require("diffview.actions").next_conflict() end, { desc = "In the merge-tool: jump to the next conflict" } },
+          { "n", "<leader>co", function() require("diffview.actions").conflict_choose "ours" end, { desc = "Choose the OURS version of a conflict" } },
+          { "n", "<leader>ct", function() require("diffview.actions").conflict_choose "theirs" end, { desc = "Choose the THEIRS version of a conflict" } },
+          { "n", "<leader>cb", function() require("diffview.actions").conflict_choose "base" end, { desc = "Choose the BASE version of a conflict" } },
+          { "n", "<leader>ca", function() require("diffview.actions").conflict_choose "all" end, { desc = "Choose all the versions of a conflict" } },
+          { "n", "<leader>cO", function() require("diffview.actions").conflict_choose_all "ours" end, { desc = "Choose the OURS version of a conflict for the whole file" } },
+          { "n", "<leader>cT", function() require("diffview.actions").conflict_choose_all "theirs" end, { desc = "Choose the THEIRS version of a conflict for the whole file" } },
+          { "n", "<leader>cB", function() require("diffview.actions").conflict_choose_all "base" end, { desc = "Choose the BASE version of a conflict for the whole file" } },
+          { "n", "<leader>cA", function() require("diffview.actions").conflict_choose_all "all" end, { desc = "Choose all the versions of a conflict for the whole file" } },
         },
         diff2 = {
           -- Mappings in 2-way diff layouts
@@ -328,18 +282,8 @@ return {
         diff3 = {
           { "n", "?", function() require("diffview.actions").help { "view", "diff3" } end, { desc = "Show help" } },
           -- Conflict resolution in 3-way diff
-          {
-            { "n", "x" },
-            "2do",
-            function() require("diffview.actions").diffget "ours" end,
-            { desc = "Get from OURS" },
-          },
-          {
-            { "n", "x" },
-            "3do",
-            function() require("diffview.actions").diffget "theirs" end,
-            { desc = "Get from THEIRS" },
-          },
+          { { "n", "x" }, "2do", function() require("diffview.actions").diffget("ours") end, { desc = "Get from OURS" } },
+          { { "n", "x" }, "3do", function() require("diffview.actions").diffget("theirs") end, { desc = "Get from THEIRS" } },
         },
         file_panel = {
           { "n", "?", function() require("diffview.actions").help "file_panel" end, { desc = "Show help" } },

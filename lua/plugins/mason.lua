@@ -9,9 +9,6 @@ return {
       "MasonUninstallAll",
       "MasonLog",
     },
-    keys = {
-      { "n", "<Leader>pm", function() require("mason.ui").open() end, desc = "Mason Installer" },
-    },
     opts_extend = { "registries" },
     opts = function(_, opts)
       if not opts.registries then opts.registries = {} end

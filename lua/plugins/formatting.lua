@@ -1,3 +1,12 @@
+
+vim.api.nvim_create_user_command(
+  "Format",
+  function() vim.lsp.buf.format() end,
+  { desc = "Format buffer" }
+)
+
+vim.keymap.set("n", "<leader>lf", function() vim.lsp.buf.format() end, { desc = "Format buffer" })
+
 return {
   {
     "NMAC427/guess-indent.nvim",
@@ -44,7 +53,7 @@ return {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     keys = {
-      { "n", "<leader>ua", function() require("astrocore.toggles").autopairs() end, desc = "Toggle autopairs" },
+      { "<leader>ua", function() require("astrocore.toggles").autopairs() end, desc = "Toggle autopairs" },
     },
     opts_extend = { "disable_filetype" },
     opts = {

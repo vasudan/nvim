@@ -1,14 +1,24 @@
+local icons = require "icons"
+
 vim.diagnostic.config {
   update_in_insert = false, -- less visual noise while typing
+  underline = true,
   severity_sort = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = icons["DiagnosticError"],
+      [vim.diagnostic.severity.HINT] = icons["DiagnosticHint"],
+      [vim.diagnostic.severity.WARN] = icons["DiagnosticWarn"],
+      [vim.diagnostic.severity.INFO] = icons["DiagnosticInfo"],
+    },
+  },
   float = {
     border = "rounded",
     source = "if_many",
+    header = "",
+    prefix = "",
   },
   virtual_text = true,
-  jump = {
-    on_jump = function(_, bufnr) vim.diagnostic.open_float { bufnr = bufnr, scope = "cursor", focus = false } end,
-  },
 }
 
 vim.api.nvim_create_user_command(
@@ -36,6 +46,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("[w", diagnostic_jump(false, "WARN"), "Previous warning")
     map("]w", diagnostic_jump(true, "ERROR"), "Next error")
 
+    map("gh", function() vim.diagnostic.open_float { scope = "cursor" } end, "Hover diagnostics")
     map("gd", vim.lsp.buf.definition, "Goto definition")
     map("<leader>ld", vim.lsp.buf.definition, "Goto definition")
     map("<leader>lr", vim.lsp.buf.references, "Goto references")
@@ -65,8 +76,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
-
-local icons = require "icons"
 return {
   {
     "folke/which-key.nvim",
@@ -76,13 +85,43 @@ return {
     },
   },
   {
+    "folke/lazydev.nvim",
+    ft = "lua",
+    cmd = "LazyDev",
+    opts_extend = { "library" },
+    opts = {
+      library = {
+        { path = "lazy.nvim", words = { "LazySpec" } },
+        { path = "snacks.nvim", words = { "Snacks" } },
+        { path = "blink.cmp", words = { "blink" } },
+        { path = "lazydev.nvim", words = { "LazyDev" } },
+        { path = "render-markdown.nvim", words = { "RenderMarkdown" } },
+        { path = "which-key.nvim", words = { "WhichKey" } },
+      },
+    },
+    specs = {
+      {
+        "saghen/blink.cmp",
+        optional = true,
+        opts = {
+          sources = {
+            default = { "lazydev" },
+            providers = {
+              lazydev = { name = "LazyDev", module = "lazydev.integrations.blink", score_offset = 100 },
+            },
+          },
+        },
+      },
+    },
+  },
+  {
     "mason-org/mason-lspconfig.nvim",
     dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
     event = { "BufReadPost", "BufNewFile", "BufWritePost" },
     cmd = { "LspInstall", "LspUninstall" },
     opts_extend = { "ensure_installed" },
     opts = {
-      automatic_enable = false,
+      automatic_enable = true,
       ensure_installed = {},
     },
   },
@@ -99,7 +138,6 @@ return {
     "stevearc/aerial.nvim",
     keys = {
       {
-        "n",
         "<Leader>ls",
         function()
           local aerial_avail, aerial = pcall(require, "aerial")
@@ -111,7 +149,7 @@ return {
         end,
         desc = "Search symbols",
       },
-      { "n", "<Leader>lS", function() require("aerial").toggle() end, desc = "Symbols outline" },
+      { "<Leader>lS", function() require("aerial").toggle() end, desc = "Symbols outline" },
     },
     opts = {},
   },
@@ -136,9 +174,9 @@ return {
       -- See :h blink-cmp-config-keymap for defining your own keymap
       opts.keymap = {
         preset = "none",
-        ["<C-x>"] = { "show", "show_documentation", "hide_documentation" },
+        ["<C-x>"] = { "show", "show_documentation", "hide_documentation", "fallback" },
         ["<C-e>"] = { "hide", "fallback" },
-        ["<CR>"] = { "select_and_accept" },
+        ["<CR>"] = { "select_and_accept", "fallback" },
         ["<C-p>"] = { "select_prev", "fallback" },
         ["<C-n>"] = { "select_next", "fallback" },
         ["<C-b>"] = { "scroll_documentation_up", "fallback" },
