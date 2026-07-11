@@ -66,4 +66,3 @@ vim.keymap.set("v", ">", ">gv")
 
 require "win_term_setup" -- This needs to be called before lazy_setup so toggle-term uses the right shell.
 require "lazy_setup"
-vim.keymap.set("n", "<leader>n", function() require("snacks").picker.notifications() end, { desc = "Find notifications" } )

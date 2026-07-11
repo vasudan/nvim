@@ -20,10 +20,8 @@ return {
   {
     "folke/snacks.nvim",
     keys = {
-      "n",
-      "<Leader>uz",
-      function() require("snacks").toggle.zen():toggle() end,
-      "Toggle zen mode",
+      { "<leader>uw", function() vim.wo.wrap = not vim.wo.wrap end, desc = "Toggle wrap mode" },
+      { "<leader>uz", function() require("snacks").toggle.zen():toggle() end, desc = "Toggle zen mode" },
     },
     opts = {
       dashboard = {
@@ -107,8 +105,14 @@ return {
   },
   {
     "AstroNvim/astrotheme",
+    lazy = false,
+    priority = 1000,
     opts = {
       palette = "astromars",
     },
+    config = function(_, opts)
+      require("astrotheme").setup(opts)
+      vim.cmd.colorscheme("astromars")
+    end,
   }
 }

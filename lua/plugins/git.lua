@@ -77,15 +77,15 @@ return {
     "folke/snacks.nvim",
     keys = {
       { "n", "<Leader>go", function() require("snacks").gitbrowse() end, desc = "Git browse (open)" },
-      { "n", "<Leader>gb", function() require("snacks").picker.git_branches() end, "Git branches" },
+      { "n", "<Leader>gb", function() require("snacks").picker.git_branches() end, desc = "Git branches" },
       {
         "n",
         "<Leader>gl",
         function() require("snacks").picker.git_log { current_file = true, follow = true } end,
         "Git log (current file)",
       },
-      { "n", "<Leader>gL", function() require("snacks").picker.git_log() end, "Git log (repository)" },
-      { "n", "<Leader>gs", function() require("snacks").picker.git_stash() end, "Git stash" },
+      { "n", "<Leader>gL", function() require("snacks").picker.git_log() end, desc = "Git log (repository)" },
+      { "n", "<Leader>gs", function() require("snacks").picker.git_stash() end, desc = "Git stash" },
     },
   },
   {
@@ -116,11 +116,7 @@ return {
           vim.keymap.set(mode, l, r, keys)
         end
         local prefix = "<Leader>g"
-        map(
-          "n",
-          prefix .. "a",
-          { function() gitsigns.blame_line { full = true } end, desc = "View Git blame (annotate)" }
-        )
+        map("n", prefix .. "a", function() gitsigns.blame_line { full = true } end, { desc = "View Git blame (annotate)" })
         map("n", prefix .. "gf", git_fetch, { desc = "Git fetch" })
         map("n", prefix .. "gc", git_commit, { desc = "Git commit" })
         map("n", prefix .. "gp", git_push, { desc = "Git push" })
@@ -141,11 +137,11 @@ return {
         -- maps.n[prefix .. "S"] = { function() gitsigns.stage_buffer() end, desc = "Stage Git buffer" }
         -- maps.n[prefix .. "d"] = { function() gitsigns.diffthis() end, desc = "View Git diff" }
 
-        map("n", "[G", { function() gitsigns.nav_hunk "first" end, desc = "First Git hunk" })
-        map("n", "]G", { function() gitsigns.nav_hunk "last" end, desc = "Last Git hunk" })
-        map("n", "]g", { function() gitsigns.nav_hunk "next" end, desc = "Next Git hunk" })
-        map("n", "[g", { function() gitsigns.nav_hunk "prev" end, desc = "Previous Git hunk" })
-        map({ "o", "x" }, "ih", { ":<C-U>Gitsigns select_hunk<CR>", desc = "inside Git hunk" })
+        map("n", "[G", function() gitsigns.nav_hunk "first" end, { desc = "First Git hunk" })
+        map("n", "]G", function() gitsigns.nav_hunk "last" end, { desc = "Last Git hunk" })
+        map("n", "]g", function() gitsigns.nav_hunk "next" end, { desc = "Next Git hunk" })
+        map("n", "[g", function() gitsigns.nav_hunk "prev" end, { desc = "Previous Git hunk" })
+        map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>", { desc = "inside Git hunk" })
       end,
     },
   },

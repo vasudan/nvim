@@ -14,7 +14,6 @@ return {
     event = "BufEnter",
     keys = {
       {
-        "n",
         "<Leader>bb",
         function()
           buffer.buffer_picker(function(bufnr) vim.api.nvim_win_set_buf(0, bufnr) end)
@@ -22,18 +21,29 @@ return {
         "Select buffer from tabline",
       },
       {
-        "n",
         "<Leader>bd",
         function()
           buffer.buffer_picker(function(bufnr) buffer.close(bufnr) end)
         end,
         "Close buffer from tabline",
       },
-      { "n", "<leader>c", function() require("snacks").bufdelete() end, "Close buffer" },
-      { "n", "<leader>bl", function() buffer.close_left() end, "Close all buffers to the left" },
-      { "n", "<leader>br", function() buffer.close_right() end, "Close all buffers to the right" },
-      { "n", "<leader>bC", function() buffer.close_all() end, "Close all buffers" },
-      { "n", "<leader>bo", function() buffer.close_all(true) end, "Close all buffers except current" },
+      { "<leader>c", function() require("snacks").bufdelete() end, desc = "Close buffer" },
+      { "<leader>bl", function() buffer.close_left() end, desc = "Close all buffers to the left" },
+      { "<leader>br", function() buffer.close_right() end, desc = "Close all buffers to the right" },
+      { "<leader>bC", function() buffer.close_all() end, desc = "Close all buffers" },
+      { "<leader>bo", function() buffer.close_all(true) end, desc = "Close all buffers except current" },
     },
+  },
+  {
+    "mrjones2014/smart-splits.nvim",
+    keys = {
+      { "<C-Up>", function() require("smart-splits").resize_up() end, desc = "Resize split up" },
+      { "<C-Down>", function() require("smart-splits").resize_down() end, desc = "Resize split down" },
+      { "<C-Left>", function() require("smart-splits").resize_left() end, desc = "Resize split left" },
+      { "<C-Right>", function() require("smart-splits").resize_right() end, desc = "Resize split right" },
+      { "<Bar>", "<cmd>vsplit<cr>", desc = "Split vertically" },
+      { "<Bslash>", "<cmd>split<cr>", desc = "Split horizontally" },
+    }
+
   }
 }

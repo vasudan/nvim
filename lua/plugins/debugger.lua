@@ -88,9 +88,10 @@ return {
         "igorlfs/nvim-dap-view",
         lazy = true,
         keys = {
-          { "n", "<Leader>du", function() require("dap-view").toggle() end, "Toggle Debugger UI" },
-          { "n", "<Leader>dh", function() require("dap-view").hover() end, "Debugger Hover" },
-          { { "n", "v" }, "<Leader>dw", "<Cmd>DapViewWatch<CR>", "Add to Watches" },
+          { "n", "<Leader>du", function() require("dap-view").toggle() end, desc = "Toggle Debugger UI" },
+          { "n", "<Leader>dh", function() require("dap-view").hover() end, desc = "Debugger Hover" },
+          { "n", "<Leader>dw", "<Cmd>DapViewWatch<CR>", desc = "Add to Watches" },
+          { "v", "<Leader>dw", "<Cmd>DapViewWatch<CR>", desc = "Add to Watches" },
         },
         ---@type dapview.Config
         opts = {},

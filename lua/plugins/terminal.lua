@@ -20,7 +20,7 @@ return {
         "n",
         "<leader>tt",
         function() Snacks.terminal.toggle() end,
-        "Toggle terminal",
+        desc = "Toggle terminal",
       },
     },
     opts = {

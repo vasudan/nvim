@@ -5,7 +5,16 @@ return {
   },
   {
     "nvimtools/none-ls.nvim",
-    main = "null-ls",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      {
+        "jay-babu/mason-null-ls.nvim",
+        dependencies = { "mason-org/mason.nvim" },
+        cmd = { "NullLsInstall", "NullLsUninstall" },
+        opts_extend = { "ensure_installed" },
+        opts = { ensure_installed = {}, handlers = {} },
+      },
+    },
     opts = function(_, opts)
       opts.sources = {
         require("null-ls").builtins.formatting.prettier.with {
@@ -30,21 +39,12 @@ return {
         },
       }
     end,
-    dependencies = {
-      {
-        "jay-babu/mason-null-ls.nvim",
-        dependencies = { "mason-org/mason.nvim" },
-        cmd = { "NullLsInstall", "NullLsUninstall" },
-        opts_extend = { "ensure_installed" },
-        opts = { ensure_installed = {}, handlers = {} },
-      },
-    },
   },
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     keys = {
-      { "n", "<leader>ua", function() require("astrocore.toggles").autopairs() end, "Toggle autopairs" },
+      { "n", "<leader>ua", function() require("astrocore.toggles").autopairs() end, desc = "Toggle autopairs" },
     },
     opts_extend = { "disable_filetype" },
     opts = {

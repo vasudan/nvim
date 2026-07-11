@@ -20,7 +20,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("starter-lsp-attach", { clear = true }),
   callback = function(event)
     local map = function(keys, func, desc)
-      vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+      vim.keymap.set("n", keys, func, { buffer = event.buf, desc = desc })
     end
 
     local function diagnostic_jump(dir, severity)
@@ -76,8 +76,15 @@ return {
     },
   },
   {
-    "neovim/nvim-lspconfig",
-    opts = {},
+    "mason-org/mason-lspconfig.nvim",
+    dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
+    event = { "BufReadPost", "BufNewFile", "BufWritePost" },
+    cmd = { "LspInstall", "LspUninstall" },
+    opts_extend = { "ensure_installed" },
+    opts = {
+      automatic_enable = false,
+      ensure_installed = {},
+    },
   },
   {
     "folke/snacks.nvim",
@@ -102,9 +109,9 @@ return {
             require("snacks").picker.lsp_symbols()
           end
         end,
-        "Search symbols",
+        desc = "Search symbols",
       },
-      { "n", "<Leader>lS", function() require("aerial").toggle() end, "Symbols outline" },
+      { "n", "<Leader>lS", function() require("aerial").toggle() end, desc = "Symbols outline" },
     },
     opts = {},
   },
@@ -114,8 +121,6 @@ return {
       "saghen/blink.lib",
     },
     build = function()
-      -- build the fuzzy matcher, optionally add a timeout to `pwait(timeout_ms)`
-      -- you can use `gb` in `:Lazy` to rebuild the plugin as needed
       require("blink.cmp").build():pwait()
     end,
 
