@@ -61,6 +61,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     map("<leader>lD", function() require("snacks").picker.diagnostics() end, "Search diagnostics")
 
+    vim.keymap.set("n", "<Leader>/", "gcc", { remap = true, buffer = event.buf, desc = "Toggle comment line"  })
+    vim.keymap.set("x", "<Leader>/", "gc", { remap = true, buffer = event.buf, desc = "Toggle comment"  })
+
     -- Highlight references on cursor hold
     local client = vim.lsp.get_client_by_id(event.data.client_id)
     if client and client.server_capabilities.documentHighlightProvider then
@@ -136,6 +139,7 @@ return {
   },
   {
     "stevearc/aerial.nvim",
+    event = "BufEnter",
     keys = {
       {
         "<Leader>ls",

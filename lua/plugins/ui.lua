@@ -25,7 +25,7 @@ return {
     },
     opts = {
       input = {
-        enabled = true
+        enabled = true,
       },
       dashboard = {
         preset = {
@@ -34,8 +34,7 @@ return {
             { key = "f", action = "<Leader>ff", icon = icons["Search"], desc = "Find File  " },
             { key = "w", action = "<Leader>fw", icon = icons["WordFile"], desc = "Find Word  " },
             { key = "'", action = "<Leader>f'", icon = icons["Bookmarks"], desc = "Bookmarks  " },
-            { key = "o", action = "<Leader>Sf", icon = icons["DefaultFile"], desc = "Open Session  " },
-            { key = "s", action = "<Leader>Sl", icon = icons["Refresh"], desc = "Last Session  " },
+            { key = "o", action = "<Leader>sl", icon = icons["DefaultFile"], desc = "Open Session  " },
           },
           header = "",
         },
@@ -57,32 +56,19 @@ return {
       picker = {
         ui_select = true,
       },
+      ---@class snacks.zen.Config
       zen = {
-        toggles = { dim = false, diagnostics = false, inlay_hints = false },
-        on_open = function(win)
-          -- disable snacks indent
-          vim.b[win.buf].snacks_indent_old = vim.b[win.buf].snacks_indent
-          vim.b[win.buf].snacks_indent = false
-        end,
-        on_close = function(win)
-          -- restore snacks indent setting
-          vim.b[win.buf].snacks_indent = vim.b[win.buf].snacks_indent_old
-        end,
+        toggles = { dim = false, diagnostics = true, inlay_hints = true },
+        show = {
+          tabline = true,
+          statusline = true,
+        },
         win = {
-          width = function() return math.floor(vim.o.columns * 0.85) end,
+          width = 0.9,
           height = 0.9,
           backdrop = {
             transparent = false,
             win = { wo = { winhighlight = "Normal:Normal" } },
-          },
-          wo = {
-            number = false,
-            relativenumber = false,
-            signcolumn = "no",
-            foldcolumn = "0",
-            winbar = "",
-            list = false,
-            showbreak = "NONE",
           },
         },
       },
@@ -115,7 +101,7 @@ return {
     },
     config = function(_, opts)
       require("astrotheme").setup(opts)
-      vim.cmd.colorscheme("astromars")
+      vim.cmd.colorscheme "astromars"
     end,
-  }
+  },
 }

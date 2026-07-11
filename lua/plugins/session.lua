@@ -1,5 +1,5 @@
 local icons = require "icons"
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,winsize,winpos,terminal,localoptions"
 
 return {
   {
@@ -19,7 +19,10 @@ return {
     ---@type AutoSession.Config
     opts = {
       suppressed_dirs = { "~/", "~/Downloads", "/" },
+      bypass_save_filetypes = { "alpha", "dashboard", "snacks_dashboard" },
       auto_restore_last_session = true,
+      cwd_change_handling = true,
+      legacy_cmds = false,
       ---@type SessionLens
       session_lens = {
         picker = 'snacks',
