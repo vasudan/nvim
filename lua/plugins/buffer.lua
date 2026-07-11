@@ -1,6 +1,12 @@
 local icons = require "icons"
 local buffer = require "config.buffer"
 
+
+vim.keymap.set("n", "]b", "<cmd>bnext<CR>", { desc = "Next buffer" })
+vim.keymap.set("n", "[b", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "]t", "<cmd>tabnext<CR>", { desc = "Next tab" })
+vim.keymap.set("n", "[t", "<cmd>tabprevious<CR>", { desc = "Previous tab" })
+
 return {
   {
     "folke/which-key.nvim",

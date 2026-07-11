@@ -30,14 +30,14 @@ local git_pull = function()
 end
 
 local git_push = function()
-  if vim.fn.confirm("Push changes?", "&Yes\n&No") == 1 then
+  Snacks.picker.util.confirm("Push changes?", function()
     local result = vim.fn.systemlist { "git", "push" }
     if vim.v.shell_error ~= 0 then
       vim.notify("git push failed:\n" .. table.concat(result, "\n"), vim.log.levels.ERROR)
       return
     end
     vim.notify("git push:\n" .. table.concat(result, "\n"), vim.log.levels.INFO)
-  end
+  end)
 end
 
 local git_stash = function()

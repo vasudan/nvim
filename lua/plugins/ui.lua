@@ -24,6 +24,9 @@ return {
       { "<leader>uz", function() require("snacks").toggle.zen():toggle() end, desc = "Toggle zen mode" },
     },
     opts = {
+      input = {
+        enabled = true
+      },
       dashboard = {
         preset = {
           keys = {
