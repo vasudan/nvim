@@ -1,5 +1,21 @@
+local toggle_explorer = function()
+  local explorer_pickers = Snacks.picker.get { source = "explorer" }
+  for _, v in pairs(explorer_pickers) do
+    if v:is_focused() then
+      v:close()
+    else
+      Snacks.explorer.reveal()
+      v:focus()
+    end
+  end
+  if #explorer_pickers == 0 then Snacks.explorer.reveal() end
+end
+
 return {
   "folke/snacks.nvim",
+  keys = {
+    { "n", "<Leader>e", toggle_explorer, "Toggle Explorer" }
+  },
   ---@type snacks.Config
   opts = {
     explorer = {
@@ -95,33 +111,9 @@ return {
                 vim.notify("Copied: " .. result)
               end)
             end,
-          },
-        },
-      },
-    },
-  },
-  specs = {
-    {
-      "AstroNvim/astrocore",
-      ---@type fun(_: any, opts: AstroCoreOpts): AstroCoreOpts?
-      opts = function(_, opts)
-        local maps = opts.mappings or {}
-        maps.n["<Leader>e"] = {
-          function()
-            local explorer_pickers = Snacks.picker.get { source = "explorer" }
-            for _, v in pairs(explorer_pickers) do
-              if v:is_focused() then
-                v:close()
-              else
-                Snacks.explorer.reveal()
-                v:focus()
-              end
-            end
-            if #explorer_pickers == 0 then Snacks.explorer.reveal() end
-          end,
-          desc = "Toggle explorer",
+          }
         }
-      end,
-    },
-  },
+      }
+    }
+  }
 }

@@ -1,27 +1,68 @@
--- This file simply bootstraps the installation of Lazy.nvim and then calls other files for execution
--- This file doesn't necessarily need to be touched, BE CAUTIOUS editing this file and proceed at your own risk.
-local lazypath = vim.env.LAZY or vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+-- Loader (faster startup)
+vim.loader.enable()
 
-if not (vim.env.LAZY or (vim.uv or vim.loop).fs_stat(lazypath)) then
-  -- stylua: ignore
-  local result = vim.fn.system({ "git", "clone", "--filter=blob:none", "https://github.com/folke/lazy.nvim.git", "--branch=stable", lazypath })
-  if vim.v.shell_error ~= 0 then
-    -- stylua: ignore
-    vim.api.nvim_echo({ { ("Error cloning lazy.nvim:\n%s\n"):format(result), "ErrorMsg" }, { "Press any key to exit...", "MoreMsg" } }, true, {})
-    vim.fn.getchar()
-    vim.cmd.quit()
-  end
-end
+-- Leader keys
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-vim.opt.rtp:prepend(lazypath)
+-- If icons look broken or missing, install a Nerd Font: https://www.nerdfonts.com/
+vim.g.icons_enabled = true
 
--- validate that lazy is available
-if not pcall(require, "lazy") then
-  -- stylua: ignore
-  vim.api.nvim_echo({ { ("Unable to load lazy from: %s\n"):format(lazypath), "ErrorMsg" }, { "Press any key to exit...", "MoreMsg" } }, true, {})
-  vim.fn.getchar()
-  vim.cmd.quit()
-end
+-- Options
+vim.opt.number = true -- line numbers
+vim.opt.mouse = "a" -- allow mouse
+vim.opt.clipboard = "" -- unnamedplus -- sync with system clipboard
+vim.opt.ignorecase = true -- case-insensitive search...
+vim.opt.smartcase = true -- ...unless you type capitals
+vim.opt.termguicolors = true -- 24-bit color support
+vim.opt.expandtab = true -- spaces instead of tabs
+vim.opt.shiftwidth = 4 -- default indent when using >>
+vim.opt.tabstop = 4 -- default indent when using <Tab>
+vim.opt.signcolumn = "yes" -- always show gutter
+vim.opt.splitright = true -- vertical splits go right
+vim.opt.splitbelow = true -- horizontal splits go below
+vim.opt.cursorline = true -- highlight current line
+vim.opt.scrolloff = 4 -- keep some context around cursor
+vim.opt.confirm = true -- dialog on unsaved changes instead of error
+vim.opt.inccommand = "split" -- live preview of :s substitutions
+vim.opt.updatetime = 250 -- faster LSP diagnostics
+vim.opt.timeoutlen = 300 -- faster which-key popup
+vim.opt.showmode = false -- already shown in the statusline
+vim.opt.breakindent = true -- wrapped lines keep their indentation
+vim.opt.wrap = false -- no line wrapping in code
+
+-- Persistent undo history — files accumulate in ~/.local/state/nvim/undo/
+-- Clean up periodically:  rm -rf ~/.local/state/nvim/undo/
+vim.opt.undofile = true
+vim.opt.completeopt = "menu,menuone,noselect"
+vim.opt.list = true -- show invisible characters
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+
+-- Yank highlight — flash yanked text briefly ─────────────────────────────
+vim.api.nvim_create_autocmd("TextYankPost", {
+	desc = "Flash yanked text",
+	group = vim.api.nvim_create_augroup("starter-yank", { clear = true }),
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
+
+-- File
+vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "Write" })
+vim.keymap.set("n", "<leader>q", "<cmd>close<CR>", { desc = "Quit buffer" })
+
+-- Clear search highlights with Escape
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+-- Split navigation — Ctrl + hjkl to move between windows
+vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Focus left window" })
+vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Focus right window" })
+vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Focus lower window" })
+vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Focus upper window" })
+
+-- keep selection in visual mode after indent
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
 
 require "win_term_setup" -- This needs to be called before lazy_setup so toggle-term uses the right shell.
 require "lazy_setup"
