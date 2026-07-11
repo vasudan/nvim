@@ -65,48 +65,112 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
--- Merge blink.cmp capabilities into all LSP server configs.
--- Without this, blink.cmp can't read completion, signature-help, or
--- snippet results from the LSP server.
-vim.lsp.config("*", {
-  capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities()),
-})
 
 local icons = require "icons"
 return {
-  "folke/which-key.nvim",
-  event = "VeryLazy",
-  keys = {
-    { "<leader>l", "<Nop>", desc = icons["ActiveLSP"] .. "Language Tools" },
-  },
-}, {
-  "neovim/nvim-lspconfig",
-  opts = {},
-}, {
-  "folke/snacks.nvim",
-  ---@type snacks.Config
-  opts = {
-    words = {
-      enabled = true,
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    keys = {
+      { "<leader>l", "<Nop>", desc = icons["ActiveLSP"] .. " Language Tools" },
     },
   },
-}, {
-  "stevearc/aerial.nvim",
-  keys = {
-    {
-      "n",
-      "<Leader>ls",
-      function()
-        local aerial_avail, aerial = pcall(require, "aerial")
-        if aerial_avail and aerial.snacks_picker then
-          aerial.snacks_picker()
-        else
-          require("snacks").picker.lsp_symbols()
-        end
-      end,
-      "Search symbols",
-    },
-    { "n", "<Leader>lS", function() require("aerial").toggle() end, "Symbols outline" },
+  {
+    "neovim/nvim-lspconfig",
+    opts = {},
   },
-  opts = {},
+  {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      words = {
+        enabled = true,
+      },
+    },
+  },
+  {
+    "stevearc/aerial.nvim",
+    keys = {
+      {
+        "n",
+        "<Leader>ls",
+        function()
+          local aerial_avail, aerial = pcall(require, "aerial")
+          if aerial_avail and aerial.snacks_picker then
+            aerial.snacks_picker()
+          else
+            require("snacks").picker.lsp_symbols()
+          end
+        end,
+        "Search symbols",
+      },
+      { "n", "<Leader>lS", function() require("aerial").toggle() end, "Symbols outline" },
+    },
+    opts = {},
+  },
+  {
+    "saghen/blink.cmp",
+    dependencies = {
+      "saghen/blink.lib",
+    },
+    build = function()
+      -- build the fuzzy matcher, optionally add a timeout to `pwait(timeout_ms)`
+      -- you can use `gb` in `:Lazy` to rebuild the plugin as needed
+      require("blink.cmp").build():pwait()
+    end,
+
+    ---@module 'blink.cmp'
+    ---@param opts blink.cmp.Config
+    opts = function(_, opts)
+      -- Merge blink.cmp capabilities into all LSP server configs.
+      -- Without this, blink.cmp can't read completion, signature-help, or
+      -- snippet results from the LSP server.
+      vim.lsp.config("*", {
+        capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities()),
+      })
+      -- See :h blink-cmp-config-keymap for defining your own keymap
+      opts.keymap = {
+        preset = "none",
+        ["<C-x>"] = { "show", "show_documentation", "hide_documentation" },
+        ["<C-e>"] = { "hide", "fallback" },
+        ["<CR>"] = { "select_and_accept" },
+        ["<C-p>"] = { "select_prev", "fallback" },
+        ["<C-n>"] = { "select_next", "fallback" },
+        ["<C-b>"] = { "scroll_documentation_up", "fallback" },
+        ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+        ["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
+        ["<S-Tab>"] = { "snippet_backward", "select_prev", "fallback" },
+      }
+
+      -- show the documentation popup automatically
+      opts.completion = { documentation = { auto_show = true } }
+
+      -- list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      opts.sources = { default = { "lsp", "path", "snippets", "buffer" } }
+
+      -- Rust fuzzy matcher for typo resistance and significantly better performance
+      -- You may use a lua implementation instead by using `implementation = "lua"`
+      -- See the fuzzy documentation for more information
+      opts.fuzzy = { implementation = "rust" }
+    end,
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    dependencies = { "neovim-treesitter/treesitter-parser-registry" },
+    lazy = false,
+    build = ":TSUpdate",
+  },
+  {
+    "folke/snacks.nvim",
+    ---@type snacks.Config
+    opts = {
+      indent = {
+        indent = { char = "▏" },
+        scope = { char = "▏" },
+        filter = function(bufnr) return vim.g.snacks_indent ~= false and vim.b[bufnr].snacks_indent ~= false end,
+        animate = { enabled = false },
+      },
+    },
+  },
 }

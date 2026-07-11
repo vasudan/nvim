@@ -66,292 +66,307 @@ local icons = require "icons"
 vim.api.nvim_set_hl(0, "SnacksPickerGitStatusUntracked", { link = "Added" }) -- easier to see added files
 
 return {
-  "folke/which-key.nvim",
-  event = "VeryLazy",
-  keys = {
-    { "<leader>g", "<Nop>", desc = icons["Git"] .. "Git" },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    keys = {
+      { "<leader>g", "<Nop>", desc = icons["Git"] .. " Git" },
+    },
   },
-}, {
-  "folke/snacks.nvim",
-  keys = {
-    { "n", "<Leader>go", function() require("snacks").gitbrowse() end, desc = "Git browse (open)" },
-    { "n", "<Leader>gb", function() require("snacks").picker.git_branches() end, "Git branches" },
-    {
-      "n",
-      "<Leader>gl",
-      function() require("snacks").picker.git_log { current_file = true, follow = true } end,
-      "Git log (current file)",
-    },
-    { "n", "<Leader>gL", function() require("snacks").picker.git_log() end, "Git log (repository)" },
-    { "n", "<Leader>gs", function() require("snacks").picker.git_stash() end, "Git stash" },
-  },
-}, {
-  "lewis6991/gitsigns.nvim",
-  enabled = vim.fn.executable "git" == 1,
-  opts = {
-    signs = {
-      add = { text = icons["GitSign"] },
-      change = { text = icons["GitSign"] },
-      delete = { text = icons["GitSign"] },
-      topdelete = { text = icons["GitSign"] },
-      changedelete = { text = icons["GitSign"] },
-      untracked = { text = icons["GitSign"] },
-    },
-    signs_staged = {
-      add = { text = icons["GitSign"] },
-      change = { text = icons["GitSign"] },
-      delete = { text = icons["GitSign"] },
-      topdelete = { text = icons["GitSign"] },
-      changedelete = { text = icons["GitSign"] },
-      untracked = { text = icons["GitSign"] },
-    },
-    on_attach = function(bufnr)
-      local gitsigns = require "gitsigns"
-      local function map(mode, l, r, keys)
-        keys = keys or {}
-        keys.buffer = bufnr
-        vim.keymap.set(mode, l, r, keys)
-      end
-      local prefix = "<Leader>g"
-      map(
+  {
+    "folke/snacks.nvim",
+    keys = {
+      { "n", "<Leader>go", function() require("snacks").gitbrowse() end, desc = "Git browse (open)" },
+      { "n", "<Leader>gb", function() require("snacks").picker.git_branches() end, "Git branches" },
+      {
         "n",
-        prefix .. "a",
-        { function() gitsigns.blame_line { full = true } end, desc = "View Git blame (annotate)" }
-      )
-      map("n", prefix .. "gf", git_fetch, { desc = "Git fetch" })
-      map("n", prefix .. "gc", git_commit, { desc = "Git commit" })
-      map("n", prefix .. "gp", git_push, { desc = "Git push" })
-      map("n", prefix .. "gP", git_pull, { desc = "Git pull" })
-      map("n", prefix .. "gS", git_push, { desc = "Git stash push" })
-      -- maps.n[prefix .. "p"] = { function() gitsigns.preview_hunk_inline() end, desc = "Preview Git hunk" }
-      -- maps.n[prefix .. "r"] = { function() gitsigns.reset_hunk() end, desc = "Reset Git hunk" }
-      -- maps.v[prefix .. "r"] = {
-      --   function() gitsigns.reset_hunk { vim.fn.line ".", vim.fn.line "v" } end,
-      --   desc = "Reset Git hunk",
-      -- }
-      -- maps.n[prefix .. "R"] = { function() gitsigns.reset_buffer() end, desc = "Reset Git buffer" }
-      -- maps.n[prefix .. "s"] = { function() gitsigns.stage_hunk() end, desc = "Stage/Unstage Git hunk" }
-      -- maps.v[prefix .. "s"] = {
-      --   function() gitsigns.stage_hunk { vim.fn.line ".", vim.fn.line "v" } end,
-      --   desc = "Stage Git hunk",
-      -- }
-      -- maps.n[prefix .. "S"] = { function() gitsigns.stage_buffer() end, desc = "Stage Git buffer" }
-      -- maps.n[prefix .. "d"] = { function() gitsigns.diffthis() end, desc = "View Git diff" }
-
-      map("n", "[G", { function() gitsigns.nav_hunk "first" end, desc = "First Git hunk" })
-      map("n", "]G", { function() gitsigns.nav_hunk "last" end, desc = "Last Git hunk" })
-      map("n", "]g", { function() gitsigns.nav_hunk "next" end, desc = "Next Git hunk" })
-      map("n", "[g", { function() gitsigns.nav_hunk "prev" end, desc = "Previous Git hunk" })
-      map({ "o", "x" }, "ih", { ":<C-U>Gitsigns select_hunk<CR>", desc = "inside Git hunk" })
-    end,
+        "<Leader>gl",
+        function() require("snacks").picker.git_log { current_file = true, follow = true } end,
+        "Git log (current file)",
+      },
+      { "n", "<Leader>gL", function() require("snacks").picker.git_log() end, "Git log (repository)" },
+      { "n", "<Leader>gs", function() require("snacks").picker.git_stash() end, "Git stash" },
+    },
   },
-}, {
-  "sindrets/diffview.nvim",
-  keys = {
-    -- Git status / changed files view
-    { "<leader>gg", "<Cmd>DiffviewOpen<CR>", desc = "Show git status" },
-    -- File history views
-    { "<leader>gv", "<Cmd>DiffviewFileHistory<CR>", desc = "Repo history" },
-    { "<leader>gV", "<Cmd>DiffviewFileHistory %<CR>", desc = "Current file history" },
-    -- Visual mode: history of selected lines
-    { "<leader>gv", ":'<,'>DiffviewFileHistory<CR>", desc = "Selection history", mode = "v" },
-    -- Compare with revisions
-    {
-      "<leader>gr",
-      function()
-        vim.ui.input({ prompt = "Compare revision (ex. main, HEAD~5, main..HEAD): " }, function(refs)
-          if refs and refs:match "%S" then vim.cmd(("DiffviewOpen %s"):format(refs)) end
-        end)
+  {
+    "lewis6991/gitsigns.nvim",
+    enabled = vim.fn.executable "git" == 1,
+    opts = {
+      signs = {
+        add = { text = icons["GitSign"] },
+        change = { text = icons["GitSign"] },
+        delete = { text = icons["GitSign"] },
+        topdelete = { text = icons["GitSign"] },
+        changedelete = { text = icons["GitSign"] },
+        untracked = { text = icons["GitSign"] },
+      },
+      signs_staged = {
+        add = { text = icons["GitSign"] },
+        change = { text = icons["GitSign"] },
+        delete = { text = icons["GitSign"] },
+        topdelete = { text = icons["GitSign"] },
+        changedelete = { text = icons["GitSign"] },
+        untracked = { text = icons["GitSign"] },
+      },
+      on_attach = function(bufnr)
+        local gitsigns = require "gitsigns"
+        local function map(mode, l, r, keys)
+          keys = keys or {}
+          keys.buffer = bufnr
+          vim.keymap.set(mode, l, r, keys)
+        end
+        local prefix = "<Leader>g"
+        map(
+          "n",
+          prefix .. "a",
+          { function() gitsigns.blame_line { full = true } end, desc = "View Git blame (annotate)" }
+        )
+        map("n", prefix .. "gf", git_fetch, { desc = "Git fetch" })
+        map("n", prefix .. "gc", git_commit, { desc = "Git commit" })
+        map("n", prefix .. "gp", git_push, { desc = "Git push" })
+        map("n", prefix .. "gP", git_pull, { desc = "Git pull" })
+        map("n", prefix .. "gS", git_push, { desc = "Git stash push" })
+        -- maps.n[prefix .. "p"] = { function() gitsigns.preview_hunk_inline() end, desc = "Preview Git hunk" }
+        -- maps.n[prefix .. "r"] = { function() gitsigns.reset_hunk() end, desc = "Reset Git hunk" }
+        -- maps.v[prefix .. "r"] = {
+        --   function() gitsigns.reset_hunk { vim.fn.line ".", vim.fn.line "v" } end,
+        --   desc = "Reset Git hunk",
+        -- }
+        -- maps.n[prefix .. "R"] = { function() gitsigns.reset_buffer() end, desc = "Reset Git buffer" }
+        -- maps.n[prefix .. "s"] = { function() gitsigns.stage_hunk() end, desc = "Stage/Unstage Git hunk" }
+        -- maps.v[prefix .. "s"] = {
+        --   function() gitsigns.stage_hunk { vim.fn.line ".", vim.fn.line "v" } end,
+        --   desc = "Stage Git hunk",
+        -- }
+        -- maps.n[prefix .. "S"] = { function() gitsigns.stage_buffer() end, desc = "Stage Git buffer" }
+        -- maps.n[prefix .. "d"] = { function() gitsigns.diffthis() end, desc = "View Git diff" }
+
+        map("n", "[G", { function() gitsigns.nav_hunk "first" end, desc = "First Git hunk" })
+        map("n", "]G", { function() gitsigns.nav_hunk "last" end, desc = "Last Git hunk" })
+        map("n", "]g", { function() gitsigns.nav_hunk "next" end, desc = "Next Git hunk" })
+        map("n", "[g", { function() gitsigns.nav_hunk "prev" end, desc = "Previous Git hunk" })
+        map({ "o", "x" }, "ih", { ":<C-U>Gitsigns select_hunk<CR>", desc = "inside Git hunk" })
       end,
-      desc = "Diff: compare revisions",
     },
-    -- File history with range
-    {
-      "<leader>gR",
-      function()
-        vim.ui.input({ prompt = "File history range (ex. HEAD~1, main..HEAD): " }, function(range)
-          if range and range:match "%S" then vim.cmd(("DiffviewFileHistory --range=%s %%"):format(range)) end
-        end)
-      end,
-      desc = "Diff: file history with range",
-    },
-    -- Compare two arbitrary files
-    {
-      "<leader>g2",
-      function()
-        vim.ui.input({ prompt = "First file: " }, function(file1)
-          if not file1 or not file1:match "%S" then return end
-          vim.ui.input({ prompt = "Second file: " }, function(file2)
-            if file2 and file2:match "%S" then
-              vim.cmd(("tabnew | e %s | diffthis | vsplit %s | diffthis"):format(file1, file2))
-            end
+  },
+  {
+    "sindrets/diffview.nvim",
+    keys = {
+      -- Git status / changed files view
+      { "<leader>gg", "<Cmd>DiffviewOpen<CR>", desc = "Show git status" },
+      -- File history views
+      { "<leader>gv", "<Cmd>DiffviewFileHistory<CR>", desc = "Repo history" },
+      { "<leader>gV", "<Cmd>DiffviewFileHistory %<CR>", desc = "Current file history" },
+      -- Visual mode: history of selected lines
+      { "<leader>gv", ":'<,'>DiffviewFileHistory<CR>", desc = "Selection history", mode = "v" },
+      -- Compare with revisions
+      {
+        "<leader>gr",
+        function()
+          vim.ui.input({ prompt = "Compare revision (ex. main, HEAD~5, main..HEAD): " }, function(refs)
+            if refs and refs:match "%S" then vim.cmd(("DiffviewOpen %s"):format(refs)) end
           end)
-        end)
-      end,
-      desc = "Diff: Compare 2 files",
-    },
-  },
-  opts = {
-    diff_binaries = false,
-    enhanced_diff_hl = true, -- Better diff highlighting
-    use_icons = true,
-    show_help_hints = true,
-    watch_index = true,
-    icons = {
-      folder_closed = "",
-      folder_open = "",
-    },
-    signs = {
-      fold_closed = "",
-      fold_open = "",
-      done = "✓",
-    },
-    view = {
-      default = {
-        layout = "diff2_horizontal",
-        disable_diagnostics = true, -- Cleaner view
-        winbar_info = true,
+        end,
+        desc = "Diff: compare revisions",
       },
-      merge_tool = {
-        layout = "diff3_horizontal", -- diff3_horizontal | diff3_vertical | diff3_mixed | diff4_mixed
-        disable_diagnostics = true,
-        winbar_info = true,
+      -- File history with range
+      {
+        "<leader>gR",
+        function()
+          vim.ui.input({ prompt = "File history range (ex. HEAD~1, main..HEAD): " }, function(range)
+            if range and range:match "%S" then vim.cmd(("DiffviewFileHistory --range=%s %%"):format(range)) end
+          end)
+        end,
+        desc = "Diff: file history with range",
       },
-      file_history = {
-        layout = "diff2_horizontal",
-        disable_diagnostics = true,
-        winbar_info = true,
+      -- Compare two arbitrary files
+      {
+        "<leader>g2",
+        function()
+          vim.ui.input({ prompt = "First file: " }, function(file1)
+            if not file1 or not file1:match "%S" then return end
+            vim.ui.input({ prompt = "Second file: " }, function(file2)
+              if file2 and file2:match "%S" then
+                vim.cmd(("tabnew | e %s | diffthis | vsplit %s | diffthis"):format(file1, file2))
+              end
+            end)
+          end)
+        end,
+        desc = "Diff: Compare 2 files",
       },
     },
-    file_panel = {
-      listing_style = "tree",
-      tree_options = {
-        flatten_dirs = true,
-        folder_statuses = "only_folded",
+    opts = {
+      diff_binaries = false,
+      enhanced_diff_hl = true, -- Better diff highlighting
+      use_icons = true,
+      show_help_hints = true,
+      watch_index = true,
+      icons = {
+        folder_closed = "",
+        folder_open = "",
       },
-      win_config = {
-        position = "left",
-        width = 40,
+      signs = {
+        fold_closed = "",
+        fold_open = "",
+        done = "✓",
       },
-    },
-    file_history_panel = {
-      log_options = {
-        git = {
-          single_file = {
-            diff_merges = "combined",
-          },
-          multi_file = {
-            diff_merges = "first-parent",
-          },
-        },
-      },
-      win_config = {
-        position = "bottom",
-        height = 15,
-      },
-    },
-    keymaps = {
-      disable_defaults = true,
       view = {
-        { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close diff view" } },
-
-        -- Navigation
-        { "n", "]b", require("diffview.actions").select_next_entry, { desc = "Next file" } },
-        { "n", "[b", require("diffview.actions").select_prev_entry, { desc = "Previous file" } },
-
-        -- Conflict resolution
-        {
-          "n",
-          "[x",
-          require("diffview.actions").prev_conflict,
-          { desc = "In the merge-tool: jump to the previous conflict" },
+        default = {
+          layout = "diff2_horizontal",
+          disable_diagnostics = true, -- Cleaner view
+          winbar_info = true,
         },
-        {
-          "n",
-          "]x",
-          require("diffview.actions").next_conflict,
-          { desc = "In the merge-tool: jump to the next conflict" },
+        merge_tool = {
+          layout = "diff3_horizontal", -- diff3_horizontal | diff3_vertical | diff3_mixed | diff4_mixed
+          disable_diagnostics = true,
+          winbar_info = true,
         },
-        {
-          "n",
-          "<leader>co",
-          require("diffview.actions").conflict_choose "ours",
-          { desc = "Choose the OURS version of a conflict" },
+        file_history = {
+          layout = "diff2_horizontal",
+          disable_diagnostics = true,
+          winbar_info = true,
         },
-        {
-          "n",
-          "<leader>ct",
-          require("diffview.actions").conflict_choose "theirs",
-          { desc = "Choose the THEIRS version of a conflict" },
-        },
-        {
-          "n",
-          "<leader>cb",
-          require("diffview.actions").conflict_choose "base",
-          { desc = "Choose the BASE version of a conflict" },
-        },
-        {
-          "n",
-          "<leader>ca",
-          require("diffview.actions").conflict_choose "all",
-          { desc = "Choose all the versions of a conflict" },
-        },
-        {
-          "n",
-          "<leader>cO",
-          require("diffview.actions").conflict_choose_all "ours",
-          { desc = "Choose the OURS version of a conflict for the whole file" },
-        },
-        {
-          "n",
-          "<leader>cT",
-          require("diffview.actions").conflict_choose_all "theirs",
-          { desc = "Choose the THEIRS version of a conflict for the whole file" },
-        },
-        {
-          "n",
-          "<leader>cB",
-          require("diffview.actions").conflict_choose_all "base",
-          { desc = "Choose the BASE version of a conflict for the whole file" },
-        },
-        {
-          "n",
-          "<leader>cA",
-          require("diffview.actions").conflict_choose_all "all",
-          { desc = "Choose all the versions of a conflict for the whole file" },
-        },
-      },
-      diff2 = {
-        -- Mappings in 2-way diff layouts
-        { "n", "?", require("diffview.actions").help { "view", "diff2" }, { desc = "Show help" } },
-      },
-      diff3 = {
-        { "n", "?", require("diffview.actions").help { "view", "diff3" }, { desc = "Show help" } },
-        -- Conflict resolution in 3-way diff
-        { { "n", "x" }, "2do", require("diffview.actions").diffget "ours", { desc = "Get from OURS" } },
-        { { "n", "x" }, "3do", require("diffview.actions").diffget "theirs", { desc = "Get from THEIRS" } },
       },
       file_panel = {
-        { "n", "?", require("diffview.actions").help "file_panel", { desc = "Show help" } },
-        { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close diff view" } },
-        { "n", "<cr>", require("diffview.actions").select_entry, { desc = "Open diff" } },
-        { "n", "o", require("diffview.actions").goto_file_edit, { desc = "Go to file" } },
-        { "n", "f", "<Cmd>Fetch<CR>", { desc = "Git fetch" } },
-        { "n", "c", "<Cmd>Commit<CR>", { desc = "Git commit" } },
-        { "n", "p", "<Cmd>Push<CR>", { desc = "Git push" } },
-        { "n", "P", "<Cmd>Pull<CR>", { desc = "Git pull" } },
-        { "n", "R", require("diffview.actions").refresh_files, { desc = "Refresh" } },
-        { "n", "<tab>", require("diffview.actions").toggle_stage_entry, { desc = "Stage/unstage" } },
-        { "n", "S", require("diffview.actions").stage_all, { desc = "Stage all" } },
-        { "n", "U", require("diffview.actions").unstage_all, { desc = "Unstage all" } },
+        listing_style = "tree",
+        tree_options = {
+          flatten_dirs = true,
+          folder_statuses = "only_folded",
+        },
+        win_config = {
+          position = "left",
+          width = 40,
+        },
       },
       file_history_panel = {
-        { "n", "?", require("diffview.actions").help "file_history_panel", { desc = "Show help" } },
-        { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close" } },
-        { "n", "<cr>", require("diffview.actions").select_entry, { desc = "Open diff" } },
-        { "n", "o", require("diffview.actions").goto_file_edit, { desc = "Go to file" } },
-        { "n", "y", require("diffview.actions").copy_hash, { desc = "Copy commit hash" } },
-        { "n", "L", require("diffview.actions").open_commit_log, { desc = "Show commit details" } },
+        log_options = {
+          git = {
+            single_file = {
+              diff_merges = "combined",
+            },
+            multi_file = {
+              diff_merges = "first-parent",
+            },
+          },
+        },
+        win_config = {
+          position = "bottom",
+          height = 15,
+        },
+      },
+      keymaps = {
+        disable_defaults = true,
+        view = {
+          { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close diff view" } },
+
+          -- Navigation
+          { "n", "]b", function() require("diffview.actions").select_next_entry() end, { desc = "Next file" } },
+          { "n", "[b", function() require("diffview.actions").select_prev_entry() end, { desc = "Previous file" } },
+
+          -- Conflict resolution
+          {
+            "n",
+            "[x",
+            function() require("diffview.actions").prev_conflict() end,
+            { desc = "In the merge-tool: jump to the previous conflict" },
+          },
+          {
+            "n",
+            "]x",
+            function() require("diffview.actions").next_conflict() end,
+            { desc = "In the merge-tool: jump to the next conflict" },
+          },
+          {
+            "n",
+            "<leader>co",
+            function() require("diffview.actions").conflict_choose "ours" end,
+            { desc = "Choose the OURS version of a conflict" },
+          },
+          {
+            "n",
+            "<leader>ct",
+            function() require("diffview.actions").conflict_choose "theirs" end,
+            { desc = "Choose the THEIRS version of a conflict" },
+          },
+          {
+            "n",
+            "<leader>cb",
+            function() require("diffview.actions").conflict_choose "base" end,
+            { desc = "Choose the BASE version of a conflict" },
+          },
+          {
+            "n",
+            "<leader>ca",
+            function() require("diffview.actions").conflict_choose "all" end,
+            { desc = "Choose all the versions of a conflict" },
+          },
+          {
+            "n",
+            "<leader>cO",
+            function() require("diffview.actions").conflict_choose_all "ours" end,
+            { desc = "Choose the OURS version of a conflict for the whole file" },
+          },
+          {
+            "n",
+            "<leader>cT",
+            function() require("diffview.actions").conflict_choose_all "theirs" end,
+            { desc = "Choose the THEIRS version of a conflict for the whole file" },
+          },
+          {
+            "n",
+            "<leader>cB",
+            function() require("diffview.actions").conflict_choose_all "base" end,
+            { desc = "Choose the BASE version of a conflict for the whole file" },
+          },
+          {
+            "n",
+            "<leader>cA",
+            function() require("diffview.actions").conflict_choose_all "all" end,
+            { desc = "Choose all the versions of a conflict for the whole file" },
+          },
+        },
+        diff2 = {
+          -- Mappings in 2-way diff layouts
+          { "n", "?", function() require("diffview.actions").help { "view", "diff2" } end, { desc = "Show help" } },
+        },
+        diff3 = {
+          { "n", "?", function() require("diffview.actions").help { "view", "diff3" } end, { desc = "Show help" } },
+          -- Conflict resolution in 3-way diff
+          {
+            { "n", "x" },
+            "2do",
+            function() require("diffview.actions").diffget "ours" end,
+            { desc = "Get from OURS" },
+          },
+          {
+            { "n", "x" },
+            "3do",
+            function() require("diffview.actions").diffget "theirs" end,
+            { desc = "Get from THEIRS" },
+          },
+        },
+        file_panel = {
+          { "n", "?", function() require("diffview.actions").help "file_panel" end, { desc = "Show help" } },
+          { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close diff view" } },
+          { "n", "<cr>", function() require("diffview.actions").select_entry() end, { desc = "Open diff" } },
+          { "n", "o", function() require("diffview.actions").goto_file_edit() end, { desc = "Go to file" } },
+          { "n", "f", "<Cmd>Fetch<CR>", { desc = "Git fetch" } },
+          { "n", "c", "<Cmd>Commit<CR>", { desc = "Git commit" } },
+          { "n", "p", "<Cmd>Push<CR>", { desc = "Git push" } },
+          { "n", "P", "<Cmd>Pull<CR>", { desc = "Git pull" } },
+          { "n", "R", function() require("diffview.actions").refresh_files() end, { desc = "Refresh" } },
+          { "n", "<tab>", function() require("diffview.actions").toggle_stage_entry() end, { desc = "Stage/unstage" } },
+          { "n", "S", function() require("diffview.actions").stage_all() end, { desc = "Stage all" } },
+          { "n", "U", function() require("diffview.actions").unstage_all() end, { desc = "Unstage all" } },
+        },
+        file_history_panel = {
+          { "n", "?", function() require("diffview.actions").help "file_history_panel" end, { desc = "Show help" } },
+          { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close" } },
+          { "n", "<cr>", function() require("diffview.actions").select_entry() end, { desc = "Open diff" } },
+          { "n", "o", function() require("diffview.actions").goto_file_edit() end, { desc = "Go to file" } },
+          { "n", "y", function() require("diffview.actions").copy_hash() end, { desc = "Copy commit hash" } },
+          { "n", "L", function() require("diffview.actions").open_commit_log() end, { desc = "Show commit details" } },
+        },
       },
     },
   },

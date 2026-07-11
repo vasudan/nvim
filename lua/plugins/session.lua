@@ -4,7 +4,7 @@ return {
   "folke/which-key.nvim",
   event = "VeryLazy",
   keys = {
-    { "<leader>S", "<Nop>", desc = icons["Session"] .. "Session" },
+    { "<leader>S", "<Nop>", desc = icons["Session"] .. " Session" },
   },
 }
 

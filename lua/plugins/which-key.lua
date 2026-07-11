@@ -47,7 +47,7 @@ return {
   keys = {
     { "<leader>?", function() require("which-key").show { global = false } end, desc = "Buffer Local Keymaps" },
 
-    { "<leader>x", "<Nop>", desc = icons["List"] .. "Quickfix/Lists" },
+    { "<leader>x", "<Nop>", desc = icons["List"] .. " Quickfix/Lists" },
     { "<leader>xq", "<Cmd>copen<CR>", "Open Quickfix list"},
     { "<leader>xl", "<Cmd>lopen<CR>", "Open Location list"},
   },
