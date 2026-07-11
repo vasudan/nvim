@@ -17,7 +17,6 @@ return {
     ---@type snacks.Config
     keys = {
       {
-        "n",
         "<leader>tt",
         function() Snacks.terminal.toggle() end,
         desc = "Toggle terminal",
@@ -30,5 +29,5 @@ return {
         -- refer to the configuration section below
       },
     },
-  }
+  },
 }
