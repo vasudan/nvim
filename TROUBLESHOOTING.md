@@ -1,8 +1,22 @@
 # Requirements
 - clang
 - rustc
+- ripgrep (rg)
 - tree-sitter cli
 
+# BufReadPost Errors
+
+```
+BufReadPost Autocommands for "*"
+...
+Parser could not be created for buffer 1000 and language "vimdoc"
+```
+
+Errors like this mean that the treesitter parser for the language needs to be installed
+
+```
+:TSInstall vimdoc
+```
 
 ##  Nvim not loading environment variables or full PATH
 
