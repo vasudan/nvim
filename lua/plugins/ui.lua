@@ -58,14 +58,14 @@ return {
       },
       ---@class snacks.zen.Config
       zen = {
-        toggles = { dim = false, diagnostics = true, inlay_hints = true },
+        toggles = {},
         show = {
           tabline = true,
           statusline = true,
         },
         win = {
-          width = 0.9,
-          height = 0.9,
+          width = 0.95,
+          height = 0.95,
           backdrop = {
             transparent = false,
             win = { wo = { winhighlight = "Normal:Normal" } },

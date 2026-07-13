@@ -30,6 +30,7 @@ vim.opt.timeoutlen = 300 -- faster which-key popup
 vim.opt.showmode = false -- already shown in the statusline
 vim.opt.breakindent = true -- wrapped lines keep their indentation
 vim.opt.wrap = false -- no line wrapping in code
+vim.o.winborder = "bold" -- easier to see floating windows
 
 -- Persistent undo history — files accumulate in ~/.local/state/nvim/undo/
 -- Clean up periodically:  rm -rf ~/.local/state/nvim/undo/

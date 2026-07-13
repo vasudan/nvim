@@ -1,5 +1,6 @@
 local icons = require "icons"
 
+vim.lsp.codelens.enable(true)
 vim.diagnostic.config {
   update_in_insert = false, -- less visual noise while typing
   underline = true,
@@ -13,7 +14,6 @@ vim.diagnostic.config {
     },
   },
   float = {
-    border = "rounded",
     source = "if_many",
     header = "",
     prefix = "",
@@ -26,6 +26,7 @@ vim.api.nvim_create_user_command(
   function() vim.cmd.checkhealth "vim.lsp" end,
   { desc = "LSP Information" }
 )
+
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("starter-lsp-attach", { clear = true }),
   callback = function(event)
@@ -56,26 +57,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("<leader>la", vim.lsp.buf.code_action, "Code Action")
 
     map("<leader>li", vim.lsp.buf.implementation, "Show implementations")
-    map("<leader>li", vim.lsp.buf.type_definition, "Show type definition")
+    map("<leader>lt", vim.lsp.buf.type_definition, "Show type definition")
     map("<leader>lr", vim.lsp.buf.references, "Search references")
 
     map("<leader>lD", function() require("snacks").picker.diagnostics() end, "Search diagnostics")
 
     vim.keymap.set("n", "<Leader>/", "gcc", { remap = true, buffer = event.buf, desc = "Toggle comment line"  })
     vim.keymap.set("x", "<Leader>/", "gc", { remap = true, buffer = event.buf, desc = "Toggle comment"  })
-
-    -- Highlight references on cursor hold
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
-    if client and client.server_capabilities.documentHighlightProvider then
-      vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-        buffer = event.buf,
-        callback = vim.lsp.buf.document_highlight,
-      })
-      vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-        buffer = event.buf,
-        callback = vim.lsp.buf.clear_references,
-      })
-    end
   end,
 })
 
@@ -204,7 +192,7 @@ return {
     end,
   },
   {
-    "nvim-treesitter/nvim-treesitter",
+    "neovim-treesitter/nvim-treesitter",
     dependencies = { "neovim-treesitter/treesitter-parser-registry" },
     lazy = false,
     build = ":TSUpdate",
