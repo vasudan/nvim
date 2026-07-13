@@ -1,4 +1,10 @@
-## Nvim not loading environment variables or full PATH
+# Requirements
+- clang
+- rustc
+- tree-sitter cli
+
+
+##  Nvim not loading environment variables or full PATH
 
 This is probably because it is not running as an interactive shell, meaning it does not read .bashrc
 
