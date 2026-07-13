@@ -1,5 +1,5 @@
 local toggle_explorer = function()
-  local explorer_pickers = Snacks.picker.get { source = "explorer" }
+  local explorer_pickers = Snacks.picker.get { source = "explorer", tab = true }
   for _, v in pairs(explorer_pickers) do
     if v:is_focused() then
       v:close()
@@ -28,7 +28,7 @@ return {
           ---@class snacks.picker.explorer.Config: snacks.picker.files.Config|{}
           explorer = {
             follow_file = false,
-            hidden = true,
+            hidden = true, -- shows hidden files
             win = {
               list = {
                 keys = {

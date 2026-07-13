@@ -1,8 +1,10 @@
 local M = {}
+
 function M.is_valid(bufnr)
   if not bufnr then bufnr = 0 end
   return vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted
 end
+
 function M.close(bufnr, force)
   if not bufnr or bufnr == 0 then bufnr = vim.api.nvim_get_current_buf() end
   if M.is_valid(bufnr) and #vim.t.bufs > 1 then
@@ -57,6 +59,18 @@ function M.buffer_picker(callback)
   if prev_showtabline ~= 2 then vim.opt.showtabline = prev_showtabline end
   vim.cmd.redrawtabline()
   -- end
+end
+
+---@param n integer The number of buffer tabs to navigate to (positive = right, negative = left)
+function M.nav(n)
+  local current = vim.api.nvim_get_current_buf()
+  for i, v in ipairs(vim.t.bufs) do
+    if current == v then
+      local new_buf = vim.t.bufs[(i + n - 1) % #vim.t.bufs + 1]
+      if new_buf ~= current then vim.api.nvim_set_current_buf(new_buf) end
+      return
+    end
+  end
 end
 
 return M

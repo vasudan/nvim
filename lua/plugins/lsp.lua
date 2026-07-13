@@ -100,6 +100,7 @@ return {
         { path = "lazydev.nvim", words = { "LazyDev" } },
         { path = "render-markdown.nvim", words = { "RenderMarkdown" } },
         { path = "which-key.nvim", words = { "WhichKey" } },
+        { path = "auto-session", words = { "AutoSession" } },
       },
     },
     specs = {

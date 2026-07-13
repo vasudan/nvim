@@ -2,10 +2,10 @@ local icons = require "icons"
 local buffer = require "config.buffer"
 
 
-vim.keymap.set("n", "]b", "<cmd>bnext<CR>", { desc = "Next buffer" })
-vim.keymap.set("n", "[b", "<cmd>bprevious<CR>", { desc = "Previous buffer" })
-vim.keymap.set("n", "]t", "<cmd>tabnext<CR>", { desc = "Next tab" })
-vim.keymap.set("n", "[t", "<cmd>tabprevious<CR>", { desc = "Previous tab" })
+vim.keymap.set("n", "]b", function() buffer.nav(vim.v.count1) end, { desc = "Next buffer" })
+vim.keymap.set("n", "[b", function() buffer.nav(-vim.v.count1) end, { desc = "Previous buffer" })
+vim.keymap.set("n", "]t", function() vim.cmd.tabnext() end, { desc = "Next tab" })
+vim.keymap.set("n", "[t", function() vim.cmd.tabprevious() end, { desc = "Previous tab" })
 
 return {
   {
@@ -33,7 +33,7 @@ return {
         end,
         "Close buffer from tabline",
       },
-      { "<leader>c", function() require("snacks").bufdelete() end, desc = "Close buffer" },
+      { "<leader>c", function() buffer.close() end, desc = "Close buffer" },
       { "<leader>bl", function() buffer.close_left() end, desc = "Close all buffers to the left" },
       { "<leader>br", function() buffer.close_right() end, desc = "Close all buffers to the right" },
       { "<leader>bC", function() buffer.close_all() end, desc = "Close all buffers" },
