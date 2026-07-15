@@ -53,6 +53,10 @@ vim.keymap.set("n", "<leader>w", "<cmd>write<CR>", { desc = "Write" })
 vim.keymap.set("n", "<leader>n", "<cmd>enew<CR>", { desc = "New file" })
 vim.keymap.set("n", "<leader>q", "<cmd>close<CR>", { desc = "Quit buffer" })
 
+-- remap Macro recording from q to backtick to stop accidental presses
+vim.keymap.set("n", "q", "<Nop>", { desc = "Disabled (use backtick for macros)" })
+vim.keymap.set("n", "`", "q", { desc = "Record/stop macro" })
+
 -- Clear search highlights with Escape
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 

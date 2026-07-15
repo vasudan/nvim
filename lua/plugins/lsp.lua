@@ -30,9 +30,7 @@ vim.api.nvim_create_user_command(
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("starter-lsp-attach", { clear = true }),
   callback = function(event)
-    local map = function(keys, func, desc)
-      vim.keymap.set("n", keys, func, { buffer = event.buf, desc = desc })
-    end
+    local map = function(keys, func, desc) vim.keymap.set("n", keys, func, { buffer = event.buf, desc = desc }) end
 
     local function diagnostic_jump(dir, severity)
       local jump_opts = {}
@@ -53,17 +51,21 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("<leader>lr", vim.lsp.buf.references, "Goto references")
     map("K", vim.lsp.buf.hover, "Hover documentation")
     map("gK", vim.lsp.buf.signature_help, "Signature help")
-    map("<leader>ln", vim.lsp.buf.rename, "Rename Symbol")
-    map("<leader>la", vim.lsp.buf.code_action, "Code Action")
+    map("<leader>ln", vim.lsp.buf.rename, "Rename symbol")
+    map("<leader>la", vim.lsp.buf.code_action, "Code actions")
+    map(
+      "<leader>lA",
+      function() vim.lsp.buf.code_action { context = { only = { "source" }, diagnostics = {} } } end,
+      "Code actions for file"
+    )
 
     map("<leader>li", vim.lsp.buf.implementation, "Show implementations")
     map("<leader>lt", vim.lsp.buf.type_definition, "Show type definition")
     map("<leader>lr", vim.lsp.buf.references, "Search references")
+    map("<leader>lc", vim.lsp.codelens.run, "Run codelens action")
 
-    map("<leader>lD", function() require("snacks").picker.diagnostics() end, "Search diagnostics")
-
-    vim.keymap.set("n", "<Leader>/", "gcc", { remap = true, buffer = event.buf, desc = "Toggle comment line"  })
-    vim.keymap.set("x", "<Leader>/", "gc", { remap = true, buffer = event.buf, desc = "Toggle comment"  })
+    vim.keymap.set("n", "<Leader>/", "gcc", { remap = true, buffer = event.buf, desc = "Toggle comment line" })
+    vim.keymap.set("x", "<Leader>/", "gc", { remap = true, buffer = event.buf, desc = "Toggle comment" })
   end,
 })
 
@@ -119,41 +121,30 @@ return {
   },
   {
     "folke/snacks.nvim",
+    keys = {
+      { "<leader>ls", function() require("snacks").picker.lsp_symbols() end, desc = "LSP Symbols" },
+      { "<leader>lS", function() require("snacks").picker.lsp_symbols() end, desc = "LSP Workspace Symbols" },
+      { "<leader>lD", function() require("snacks").picker.diagnostics() end, desc = "Search diagnostics" },
+    },
     ---@type snacks.Config
     opts = {
       words = {
         enabled = true,
       },
-    },
-  },
-  {
-    "stevearc/aerial.nvim",
-    event = "BufEnter",
-    keys = {
-      {
-        "<Leader>ls",
-        function()
-          local aerial_avail, aerial = pcall(require, "aerial")
-          if aerial_avail and aerial.snacks_picker then
-            aerial.snacks_picker()
-          else
-            require("snacks").picker.lsp_symbols()
-          end
-        end,
-        desc = "Search symbols",
+      indent = {
+        indent = { char = "▏" },
+        scope = { char = "▏" },
+        filter = function(bufnr) return vim.g.snacks_indent ~= false and vim.b[bufnr].snacks_indent ~= false end,
+        animate = { enabled = false },
       },
-      { "<Leader>lS", function() require("aerial").toggle() end, desc = "Symbols outline" },
     },
-    opts = {},
   },
   {
     "saghen/blink.cmp",
     dependencies = {
       "saghen/blink.lib",
     },
-    build = function()
-      require("blink.cmp").build():pwait()
-    end,
+    build = function() require("blink.cmp").build():pwait() end,
 
     ---@module 'blink.cmp'
     ---@param opts blink.cmp.Config
@@ -196,17 +187,5 @@ return {
     dependencies = { "neovim-treesitter/treesitter-parser-registry" },
     lazy = false,
     build = ":TSUpdate",
-  },
-  {
-    "folke/snacks.nvim",
-    ---@type snacks.Config
-    opts = {
-      indent = {
-        indent = { char = "▏" },
-        scope = { char = "▏" },
-        filter = function(bufnr) return vim.g.snacks_indent ~= false and vim.b[bufnr].snacks_indent ~= false end,
-        animate = { enabled = false },
-      },
-    },
   },
 }

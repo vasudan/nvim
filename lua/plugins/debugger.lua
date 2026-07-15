@@ -99,7 +99,14 @@ return {
           { "<Leader>dw", "<Cmd>DapViewWatch<CR>", desc = "Add to Watches", mode = "v" },
         },
         ---@type dapview.Config
-        opts = {},
+        opts = {
+          winbar = {
+            sections = { "watches", "scopes", "exceptions", "breakpoints", "threads", "repl" },
+            controls = {
+              enabled = true
+            }
+          },
+        },
       },
       {
         "rcarriga/cmp-dap",

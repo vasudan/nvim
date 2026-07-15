@@ -30,8 +30,12 @@ local git_pull = function()
 end
 
 local git_push = function()
-  Snacks.picker.util.confirm("Push changes?", function()
-    local result = vim.fn.systemlist { "git", "push" }
+  vim.ui.select({ "No", "Yes", "Push + track upstream (-u origin)" }, {
+    prompt = "Push changes?",
+  }, function(choice)
+    if not choice or choice == "No" then return end
+    local cmd = choice == "Yes" and { "git", "push" } or { "git", "push", "-u", "origin" }
+    local result = vim.fn.systemlist(cmd)
     if vim.v.shell_error ~= 0 then
       vim.notify("git push failed:\n" .. table.concat(result, "\n"), vim.log.levels.ERROR)
       return

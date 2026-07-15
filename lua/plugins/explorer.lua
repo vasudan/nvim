@@ -38,7 +38,6 @@ return {
                   ["a"] = { "explorer_add", desc = "Add new file/directory" },
                   ["d"] = { "explorer_del", desc = "Delete file/directory" },
                   ["r"] = { "explorer_rename", desc = "Rename file/directory" },
-                  ["F2"] = { "explorer_rename", desc = "Rename file/directory" },
                   ["c"] = { "explorer_copy", desc = "Copy file/directory" },
                   ["m"] = { "explorer_move", desc = "Move file/directory" },
                   ["o"] = { "explorer_open", desc = "Open with system application" },
@@ -48,6 +47,7 @@ return {
                   ["p"] = { "explorer_paste", desc = "Paste file/directory" },
                   ["u"] = { "explorer_update", desc = "Refresh explorer" },
                   ["<c-c>"] = { "tcd", desc = "Set working directory to current" },
+                  ["<c-t>"] = { "open_terminal", desc = "Open a terminal in the directory" },
                   ["fw"] = { "picker_grep", desc = "Live grep in directory" },
                   ["."] = { "explorer_focus", desc = "Focus current file in explorer" },
                   ["I"] = { "toggle_ignored", desc = "Toggle ignored files" },
@@ -60,7 +60,6 @@ return {
 
                   -- All these keymaps are handled by other pickers
                   ["<leader>/"] = false,
-                  ["<c-t>"] = false,
                   ["]g"] = false,
                   ["[g"] = false,
                   ["]d"] = false,
@@ -73,6 +72,17 @@ return {
               },
             },
             actions = {
+              open_terminal = function(_, item)
+                local dir
+                if item.file then
+                  if vim.fn.isdirectory(item.file) == 1 then
+                    dir = item.file
+                  else
+                    dir = vim.fn.fnamemodify(item.file, ":h")
+                  end
+                end
+                Snacks.terminal.open(nil, dir and { cwd = dir } or nil)
+              end,
               copy_path = function(_, item)
                 local modify = vim.fn.fnamemodify
                 local filepath = item.file

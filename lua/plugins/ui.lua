@@ -45,6 +45,7 @@ return {
         },
       },
       notifier = {
+        timeout = 5000, -- 5 seconds 
         icons = {
           debug = icons["Debugger"],
           error = icons["DiagnosticError"],
