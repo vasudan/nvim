@@ -103,6 +103,7 @@ return {
     config = function(_, opts)
       require("astrotheme").setup(opts)
       vim.cmd.colorscheme "astromars"
+      require("config.theme").setup()
     end,
   },
 }

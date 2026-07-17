@@ -69,6 +69,7 @@ local text_icons = {
     DapBreakpointRejected = "R",
     DapLogPoint = "L",
     DapStopped = ">",
+    Debugger = "[D]",
     DefaultFile = "[F]",
     DiagnosticError = "X",
     DiagnosticHint = "?",

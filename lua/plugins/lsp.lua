@@ -26,6 +26,11 @@ vim.api.nvim_create_user_command(
   function() vim.cmd.checkhealth "vim.lsp" end,
   { desc = "LSP Information" }
 )
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    require("config.treesitter").setup()
+  end,
+})
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("starter-lsp-attach", { clear = true }),
@@ -109,21 +114,25 @@ return {
     },
   },
   {
-    "mason-org/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim", -- install LSPs via Mason
     dependencies = { "mason-org/mason.nvim", "neovim/nvim-lspconfig" },
     event = { "BufReadPost", "BufNewFile", "BufWritePost" },
     cmd = { "LspInstall", "LspUninstall" },
     opts_extend = { "ensure_installed" },
     opts = {
-      automatic_enable = true,
+      automatic_enable = true, -- start the correct LSP when loading a filetype
       ensure_installed = {},
     },
+  },
+  {
+    "stevearc/aerial.nvim", -- used for breadcrumb in winbar
+    opts = {},
   },
   {
     "folke/snacks.nvim",
     keys = {
       { "<leader>ls", function() require("snacks").picker.lsp_symbols() end, desc = "LSP Symbols" },
-      { "<leader>lS", function() require("snacks").picker.lsp_symbols() end, desc = "LSP Workspace Symbols" },
+      { "<leader>lS", function() require("snacks").picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
       { "<leader>lD", function() require("snacks").picker.diagnostics() end, desc = "Search diagnostics" },
     },
     ---@type snacks.Config
@@ -140,7 +149,7 @@ return {
     },
   },
   {
-    "saghen/blink.cmp",
+    "saghen/blink.cmp", -- code completion
     dependencies = {
       "saghen/blink.lib",
     },
@@ -160,7 +169,7 @@ return {
         preset = "none",
         ["<C-x>"] = { "show", "show_documentation", "hide_documentation", "fallback" },
         ["<C-e>"] = { "hide", "fallback" },
-        ["<CR>"] = { "select_and_accept", "fallback" },
+        ["<C-y>"] = { "select_and_accept", "fallback" },
         ["<C-p>"] = { "select_prev", "fallback" },
         ["<C-n>"] = { "select_next", "fallback" },
         ["<C-b>"] = { "scroll_documentation_up", "fallback" },

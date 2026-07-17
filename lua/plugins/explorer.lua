@@ -81,7 +81,7 @@ return {
                     dir = vim.fn.fnamemodify(item.file, ":h")
                   end
                 end
-                Snacks.terminal.open(nil, dir and { cwd = dir } or nil)
+                Snacks.terminal.open(nil, dir and { cwd = dir, env = { tab = tostring(vim.api.nvim_get_current_tabpage()) } } or nil)
               end,
               copy_path = function(_, item)
                 local modify = vim.fn.fnamemodify

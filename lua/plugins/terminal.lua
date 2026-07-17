@@ -76,7 +76,12 @@ return {
     keys = vim.list_extend({
       {
         "<leader>tf",
-        function() Snacks.terminal.toggle(nil, { win = { position = "float" } }) end,
+        function()
+          Snacks.terminal.toggle(
+            nil,
+            { win = { position = "float" }, env = { tab = tostring(vim.api.nvim_get_current_tabpage()) } }
+          )
+        end,
         desc = "Toggle floating terminal",
       },
       {
@@ -86,7 +91,20 @@ return {
       },
     }, terminal_keys),
     opts = {
-      terminal = {},
+      terminal = {
+        --- Override the default tid function to derive the id from count, cmd, and tab number.
+        --- This makes the terminal scoped to the tab instead of the cwd
+        ---@param cmd? string | string[]
+        ---@param opts? snacks.terminal.Opts
+        tid = function(cmd, opts)
+          opts = opts or {}
+          return vim.inspect {
+            cmd = type(cmd) == "table" and cmd or { cmd },
+            count = opts.count or vim.v.count1,
+            tab = vim.api.nvim_get_current_tabpage(),
+          }
+        end,
+      },
     },
   },
 }
