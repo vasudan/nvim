@@ -44,6 +44,15 @@ local git_push = function()
   end)
 end
 
+local git_revert_file = function()
+  vim.ui.select({ "No", "Yes" }, {
+    prompt = "Revert file? This will discard all changes.",
+  }, function(choice)
+    if not choice or choice == "No" then return end
+    require("diffview.actions").restore_entry()
+  end)
+end
+
 local git_stash = function()
   vim.ui.input({ prompt = "Stash message (optional): " }, function(msg)
     local cmd = { "git", "stash", "push" }
@@ -302,6 +311,7 @@ return {
           { "n", "<tab>", function() require("diffview.actions").toggle_stage_entry() end, { desc = "Stage/unstage" } },
           { "n", "S", function() require("diffview.actions").stage_all() end, { desc = "Stage all" } },
           { "n", "U", function() require("diffview.actions").unstage_all() end, { desc = "Unstage all" } },
+          { "n", "X", git_revert_file, { desc = "Revert file" } },
         },
         file_history_panel = {
           { "n", "?", function() require("diffview.actions").help "file_history_panel" end, { desc = "Show help" } },

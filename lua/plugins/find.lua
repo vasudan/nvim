@@ -21,11 +21,6 @@ return {
       { "<Leader>f<CR>", function() require("snacks").picker.resume() end, desc = "Resume previous search" },
       { "<Leader>f'", function() require("snacks").picker.marks() end, desc = "Find marks" },
       { "<Leader>fl", function() require("snacks").picker.lines() end, desc = "Find lines" },
-      {
-        "<Leader>fa",
-        function() require("snacks").picker.files { dirs = { vim.fn.stdpath "config" }, "Config Files" } end,
-        desc = "Find AstroNvim config files",
-      },
       { "<Leader>fb", function() require("snacks").picker.buffers() end, desc = "Find buffers" },
       { "<Leader>fc", function() require("snacks").picker.grep_word() end, desc = "Find word under cursor" },
       { "<Leader>fC", function() require("snacks").picker.commands() end, desc = "Find commands" },
