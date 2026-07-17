@@ -153,6 +153,7 @@ return {
     dependencies = {
       "saghen/blink.lib",
     },
+    ---@diagnostic disable-next-line: undefined-field (blink.cmp is missing an annotation for pwait, but its there)
     build = function() require("blink.cmp").build():pwait() end,
 
     ---@module 'blink.cmp'
@@ -196,5 +197,15 @@ return {
     dependencies = { "neovim-treesitter/treesitter-parser-registry" },
     lazy = false,
     build = ":TSUpdate",
+    config = function(_)
+      require("config.treesitter").installed(true)
+      vim.api.nvim_create_autocmd("User", { 
+        pattern = "TSInstall",
+        callback = function()
+          -- Update list of installs after installing a new TS parser
+          require("config.treesitter").installed(true)
+        end,
+      })
+    end
   },
 }

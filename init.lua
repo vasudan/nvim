@@ -29,8 +29,10 @@ vim.opt.updatetime = 250 -- faster LSP diagnostics
 vim.opt.timeoutlen = 300 -- faster which-key popup
 vim.opt.showmode = false -- already shown in the statusline
 vim.opt.breakindent = true -- wrapped lines keep their indentation
+vim.opt.autoindent = true -- try to guess the indentation of the file
+vim.opt.smartindent = true -- try to guess the indentation of the file based on the language
 vim.opt.wrap = false -- no line wrapping in code
-vim.o.winborder = "bold" -- easier to see floating windows
+vim.opt.winborder = "bold" -- easier to see floating windows
 
 -- Persistent undo history — files accumulate in ~/.local/state/nvim/undo/
 -- Clean up periodically:  rm -rf ~/.local/state/nvim/undo/
