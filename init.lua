@@ -32,7 +32,6 @@ vim.opt.breakindent = true -- wrapped lines keep their indentation
 vim.opt.autoindent = true -- try to guess the indentation of the file
 vim.opt.smartindent = true -- try to guess the indentation of the file based on the language
 vim.opt.wrap = false -- no line wrapping in code
-vim.opt.winborder = "bold" -- easier to see floating windows
 
 -- Persistent undo history — files accumulate in ~/.local/state/nvim/undo/
 -- Clean up periodically:  rm -rf ~/.local/state/nvim/undo/
@@ -41,7 +40,7 @@ vim.opt.completeopt = "menu,menuone,noselect"
 vim.opt.list = true -- show invisible characters
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
--- Yank highlight — flash yanked text briefly ─────────────────────────────
+-- Yank highlight — flash yanked text briefly
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Flash yanked text",
 	group = vim.api.nvim_create_augroup("starter-yank", { clear = true }),

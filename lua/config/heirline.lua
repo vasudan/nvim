@@ -19,6 +19,12 @@ function M.get_heirline_opts()
   })
 
   return {
+    opts = {
+      disable_winbar_cb = function()
+        -- Disable the winbar for floating windows
+        return vim.api.nvim_win_get_config(0).relative ~= ""
+      end,
+    },
     tabline = { -- upper most bar
       lib.component.tabline_conditional_padding(),
       lib.component.tabline_buffers(),

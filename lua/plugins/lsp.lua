@@ -47,9 +47,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     map("gh", function() vim.diagnostic.open_float { scope = "cursor" } end, "Hover diagnostics")
     map("gd", vim.lsp.buf.definition, "Goto definition")
-    map("<leader>ld", vim.lsp.buf.definition, "Goto definition")
+    map("<leader>ld", function() vim.lsp.buf.definition(({ border = "bold" })) end, "Goto definition")
     map("<leader>lr", vim.lsp.buf.references, "Goto references")
-    map("K", vim.lsp.buf.hover, "Hover documentation")
+    map("K", function() vim.lsp.buf.hover({ border = "bold" }) end, "Hover documentation")
     map("gK", vim.lsp.buf.signature_help, "Signature help")
     map("<leader>ln", vim.lsp.buf.rename, "Rename symbol")
     map("<leader>la", vim.lsp.buf.code_action, "Code actions")
