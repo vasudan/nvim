@@ -80,7 +80,7 @@ return {
     event = "BufEnter",
     dependencies = { "zeioth/heirline-components.nvim" },
     opts = function(_, opts)
-      local ui = require "config.ui"
+      local ui = require "config.heirline"
       opts = ui.get_heirline_opts()
       return opts
     end,

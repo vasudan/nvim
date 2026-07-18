@@ -26,11 +26,6 @@ vim.api.nvim_create_user_command(
   function() vim.cmd.checkhealth "vim.lsp" end,
   { desc = "LSP Information" }
 )
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function()
-    require("config.treesitter").setup()
-  end,
-})
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("starter-lsp-attach", { clear = true }),
@@ -198,14 +193,7 @@ return {
     lazy = false,
     build = ":TSUpdate",
     config = function(_)
-      require("config.treesitter").installed(true)
-      vim.api.nvim_create_autocmd("User", { 
-        pattern = "TSInstall",
-        callback = function()
-          -- Update list of installs after installing a new TS parser
-          require("config.treesitter").installed(true)
-        end,
-      })
+      require("config.treesitter").setup()
     end
   },
 }

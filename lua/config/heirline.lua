@@ -5,7 +5,19 @@ function M.get_heirline_opts()
   vim.opt.showtabline = 2 -- always show tabline
   vim.opt.laststatus = 3 -- single global statusline that spans full width across splits
   vim.opt.cmdheight = 0 -- remove command-line when not in use
-  vim.opt.foldcolumn = 'auto'
+  vim.opt.foldcolumn = "auto"
+
+  -- Keep quickfix / location-list buffers out of the tabline
+  -- The heirline tabline shows only buflisted buffers.  Quickfix and
+  -- location-list buffers are buflisted by default in the main window area.
+  -- Setting buflisted = false hides them from the tabline.
+  vim.api.nvim_create_autocmd("FileType", {
+    desc = "Exclude quickfix and location-list buffers from the tabline",
+    group = vim.api.nvim_create_augroup("starter-qf", { clear = true }),
+    pattern = "qf",
+    callback = function() vim.bo.buflisted = false end,
+  })
+
   return {
     tabline = { -- upper most bar
       lib.component.tabline_conditional_padding(),
@@ -20,7 +32,7 @@ function M.get_heirline_opts()
         lib.component.breadcrumbs(),
         lib.component.fill(),
         require("config.components.filename").filename(),
-        require("config.components.debugger_status").debugger_status()
+        require("config.components.debugger_status").debugger_status(),
       },
     },
     statuscolumn = { -- UI left column

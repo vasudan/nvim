@@ -91,7 +91,9 @@ return {
       },
     }, terminal_keys),
     opts = {
+      ---@class snacks.terminal.Opts
       terminal = {
+        interactive = false,
         --- Override the default tid function to derive the id from count, cmd, and tab number.
         --- This makes the terminal scoped to the tab instead of the cwd
         ---@param cmd? string | string[]
@@ -104,6 +106,9 @@ return {
             tab = vim.api.nvim_get_current_tabpage(),
           }
         end,
+        keys = {
+          term_normal = {} -- override default "exit terminal mode" keymap
+        }
       },
     },
   },
