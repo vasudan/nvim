@@ -49,8 +49,8 @@ return {
     { "<leader>W", function() require("which-key").show { global = true } end, desc = "Global Keymaps" },
 
     { "<leader>x", "<Nop>", desc = icons["List"] .. " Quickfix/Lists" },
-    { "<leader>xq", "<Cmd>copen<CR>", desc = "Open Quickfix list"},
-    { "<leader>xl", "<Cmd>lopen<CR>", desc = "Open Location list"},
+    { "<leader>xq", function() vim.cmd(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and "cclose" or "copen") end, desc = "Toggle Quickfix list" },
+    { "<leader>xl", function() vim.cmd(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and "lclose" or "lopen") end, desc = "Toggle Location list" },
   },
 }
 

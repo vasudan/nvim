@@ -10,7 +10,7 @@ function M.debugger_status()
     end,
     provider = function()
 
-      return icons["Debugger"] .. require("dap").status()
+      return icons["Debugger"] .. " " .. require("dap").status()
     end,
     hl = "Debug"
   }
