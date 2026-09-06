@@ -1,5 +1,6 @@
 {
   "aerial.nvim": { "branch": "master", "commit": "28fe6e822ae344544c379d60fcb13c9519a1f08a" },
+  "agentic.nvim": { "branch": "main", "commit": "9945381350664ab3057d480e5cee02a328ef21d5" },
   "astrotheme": { "branch": "main", "commit": "37afa2a78ce4d8d3d70827f84710c14b78c5d071" },
   "auto-session": { "branch": "main", "commit": "6cde3874a9283c2db55627acca5f28e4fa402320" },
   "blink.cmp": { "branch": "main", "commit": "db8ea0b7c7ab8c8f8faa3912833c1671381e6304" },

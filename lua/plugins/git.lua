@@ -34,7 +34,7 @@ local git_push = function()
     prompt = "Push changes?",
   }, function(choice)
     if not choice or choice == "No" then return end
-    local cmd = choice == "Yes" and { "git", "push" } or { "git", "push", "-u", "origin" }
+    local cmd = choice == "Yes" and { "git", "push" } or { "git", "push", "-u", "origin", "HEAD" }
     local result = vim.fn.systemlist(cmd)
     if vim.v.shell_error ~= 0 then
       vim.notify("git push failed:\n" .. table.concat(result, "\n"), vim.log.levels.ERROR)
@@ -138,7 +138,7 @@ return {
         map("n", prefix .. "c", git_commit, { desc = "Git commit" })
         map("n", prefix .. "p", git_push, { desc = "Git push" })
         map("n", prefix .. "P", git_pull, { desc = "Git pull" })
-        map("n", prefix .. "S", git_push, { desc = "Git stash push" })
+        map("n", prefix .. "S", git_stash, { desc = "Git stash push" })
         -- maps.n[prefix .. "p"] = { function() gitsigns.preview_hunk_inline() end, desc = "Preview Git hunk" }
         -- maps.n[prefix .. "r"] = { function() gitsigns.reset_hunk() end, desc = "Reset Git hunk" }
         -- maps.v[prefix .. "r"] = {
@@ -230,7 +230,7 @@ return {
           winbar_info = true,
         },
         merge_tool = {
-          layout = "diff3_horizontal", -- diff3_horizontal | diff3_vertical | diff3_mixed | diff4_mixed
+          layout = "diff3_mixed", -- diff3_horizontal | diff3_vertical | diff3_mixed | diff4_mixed
           disable_diagnostics = true,
           winbar_info = true,
         },
