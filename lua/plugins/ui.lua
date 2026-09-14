@@ -59,7 +59,9 @@ return {
       },
       ---@class snacks.zen.Config
       zen = {
-        toggles = {},
+        toggles = {
+          dim = false
+        },
         show = {
           tabline = true,
           statusline = true,
