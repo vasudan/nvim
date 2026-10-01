@@ -24,7 +24,7 @@ return {
       },
       diff_preview = {
         enabled = true,
-        layout = "split",
+        layout = "inline",
       }
     },
     keys = {

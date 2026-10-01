@@ -82,8 +82,14 @@ return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
+    enabled = vim.fn.executable "git" == 1,
     keys = {
       { "<leader>g", "<Nop>", desc = icons["Git"] .. " Git" },
+      { "<leader>gf", git_fetch, desc = "Git fetch" },
+      { "<leader>gc", git_commit, desc = "Git commit" },
+      { "<leader>gp", git_push, desc = "Git push" },
+      { "<leader>gP", git_pull, desc = "Git pull" },
+      { "<leader>gS", git_stash, desc = "Git stash push" },
     },
   },
   {
@@ -94,7 +100,7 @@ return {
       {
         "<Leader>gl",
         function() require("snacks").picker.git_log { current_file = true, follow = true } end,
-        "Git log (current file)",
+        desc = "Git log (current file)",
       },
       { "<Leader>gL", function() require("snacks").picker.git_log() end, desc = "Git log (repository)" },
       { "<Leader>gs", function() require("snacks").picker.git_stash() end, desc = "Git stash" },
@@ -134,26 +140,6 @@ return {
           function() gitsigns.blame_line { full = true } end,
           { desc = "View Git blame (annotate)" }
         )
-        map("n", prefix .. "f", git_fetch, { desc = "Git fetch" })
-        map("n", prefix .. "c", git_commit, { desc = "Git commit" })
-        map("n", prefix .. "p", git_push, { desc = "Git push" })
-        map("n", prefix .. "P", git_pull, { desc = "Git pull" })
-        map("n", prefix .. "S", git_stash, { desc = "Git stash push" })
-        -- maps.n[prefix .. "p"] = { function() gitsigns.preview_hunk_inline() end, desc = "Preview Git hunk" }
-        -- maps.n[prefix .. "r"] = { function() gitsigns.reset_hunk() end, desc = "Reset Git hunk" }
-        -- maps.v[prefix .. "r"] = {
-        --   function() gitsigns.reset_hunk { vim.fn.line ".", vim.fn.line "v" } end,
-        --   desc = "Reset Git hunk",
-        -- }
-        -- maps.n[prefix .. "R"] = { function() gitsigns.reset_buffer() end, desc = "Reset Git buffer" }
-        -- maps.n[prefix .. "s"] = { function() gitsigns.stage_hunk() end, desc = "Stage/Unstage Git hunk" }
-        -- maps.v[prefix .. "s"] = {
-        --   function() gitsigns.stage_hunk { vim.fn.line ".", vim.fn.line "v" } end,
-        --   desc = "Stage Git hunk",
-        -- }
-        -- maps.n[prefix .. "S"] = { function() gitsigns.stage_buffer() end, desc = "Stage Git buffer" }
-        -- maps.n[prefix .. "d"] = { function() gitsigns.diffthis() end, desc = "View Git diff" }
-
         map("n", "[G", function() gitsigns.nav_hunk "first" end, { desc = "First Git hunk" })
         map("n", "]G", function() gitsigns.nav_hunk "last" end, { desc = "Last Git hunk" })
         map("n", "]g", function() gitsigns.nav_hunk "next" end, { desc = "Next Git hunk" })
