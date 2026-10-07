@@ -73,3 +73,6 @@ vim.keymap.set("v", ">", ">gv")
 
 require "win_term_setup" -- This needs to be called before lazy_setup so toggle-term uses the right shell.
 require "lazy_setup"
+
+vim.o.guifont = "Agave Nerd Font:h14"
+
