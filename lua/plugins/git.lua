@@ -183,14 +183,31 @@ return {
       {
         "<leader>g2",
         function()
-          vim.ui.input({ prompt = "First file: " }, function(file1)
-            if not file1 or not file1:match "%S" then return end
-            vim.ui.input({ prompt = "Second file: " }, function(file2)
-              if file2 and file2:match "%S" then
-                vim.cmd(("tabnew | e %s | diffthis | vsplit %s | diffthis"):format(file1, file2))
-              end
-            end)
-          end)
+          local picker = require("snacks.picker")
+          local diff = {}
+
+          ---@param state {file1?: string}
+          diff.pick = function(state, index)
+            picker({
+              source = "files",
+              prompt = ("File %d of 2: "):format(index),
+              actions = {
+                confirm = function(p, item) ---@diagnostic disable-line: param-type-mismatch
+                  p:close()
+                  if not item then return end
+                  local rel = item.filename or item.text
+                  local path = rel:match "/" and rel or (vim.fs.joinpath(vim.uv.cwd(), rel))
+                  if state.file1 then
+                    vim.cmd(("tabnew | e %s | diffthis | vsplit %s | diffthis"):format(state.file1, path))
+                  else
+                    state.file1 = path
+                    diff.pick(state, 2)
+                  end
+                end,
+              },
+            })
+          end
+          diff.pick({}, 1)
         end,
         desc = "Diff: Compare 2 files",
       },
