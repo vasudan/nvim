@@ -58,6 +58,9 @@ vim.keymap.set("n", "<leader>q", "<cmd>close<CR>", { desc = "Quit buffer" })
 vim.keymap.set("n", "q", "<Nop>", { desc = "Disabled (use backtick for macros)" })
 vim.keymap.set("n", "`", "q", { desc = "Record/stop macro" })
 
+-- Paste system clipboard after cursor
+vim.keymap.set({"n", "v"}, "<S-Ins>", '"+p', { desc = "Paste system clipboard" })
+
 -- Clear search highlights with Escape
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
