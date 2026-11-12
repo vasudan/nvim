@@ -183,12 +183,12 @@ return {
       {
         "<leader>g2",
         function()
-          local picker = require("snacks.picker")
+          local picker = require "snacks.picker"
           local diff = {}
 
           ---@param state {file1?: string}
           diff.pick = function(state, index)
-            picker({
+            picker {
               source = "files",
               prompt = ("File %d of 2: "):format(index),
               actions = {
@@ -205,20 +205,20 @@ return {
                   end
                 end,
               },
-            })
+            }
           end
           diff.pick({}, 1)
         end,
         desc = "Diff: Compare 2 files",
       },
     },
-    opts = {
-      diff_binaries = false,
-      enhanced_diff_hl = true,
-      use_icons = true,
-      show_help_hints = true,
-      watch_index = true,
-      view = {
+    opts = function(_, opts)
+      opts.diff_binaries = false
+      opts.enhanced_diff_hl = true
+      opts.use_icons = true
+      opts.show_help_hints = true
+      opts.watch_index = true
+      opts.view = {
         default = {
           layout = "diff1_inline",
           disable_diagnostics = true, -- Cleaner view
@@ -234,8 +234,8 @@ return {
           disable_diagnostics = true,
           winbar_info = true,
         },
-      },
-      file_panel = {
+      }
+      opts.file_panel = {
         listing_style = "tree",
         tree_options = {
           flatten_dirs = true,
@@ -245,8 +245,8 @@ return {
           position = "left",
           width = 40,
         },
-      },
-      file_history_panel = {
+      }
+      opts.file_history_panel = {
         log_options = {
           git = {
             single_file = {
@@ -261,97 +261,41 @@ return {
           position = "bottom",
           height = 15,
         },
-      },
-      keymaps = {
+      }
+      local actions = require "diffview.actions"
+      opts.keymaps = {
         disable_defaults = true,
         view = {
           { "n", "q", "<Cmd>DiffviewClose<CR>", { desc = "Close diff view" } },
 
           -- Navigation
-          { "n", "]b", function() require("diffview.actions").select_next_entry() end, { desc = "Next file" } },
-          { "n", "[b", function() require("diffview.actions").select_prev_entry() end, { desc = "Previous file" } },
-
-          -- Conflict resolution
-          {
-            "n",
-            "[x",
-            function() require("diffview.actions").prev_conflict() end,
-            { desc = "In the merge-tool: jump to the previous conflict" },
-          },
-          {
-            "n",
-            "]x",
-            function() require("diffview.actions").next_conflict() end,
-            { desc = "In the merge-tool: jump to the next conflict" },
-          },
-          {
-            "n",
-            "<leader>co",
-            function() require("diffview.actions").conflict_choose "ours" end,
-            { desc = "Choose the OURS version of a conflict" },
-          },
-          {
-            "n",
-            "<leader>ct",
-            function() require("diffview.actions").conflict_choose "theirs" end,
-            { desc = "Choose the THEIRS version of a conflict" },
-          },
-          {
-            "n",
-            "<leader>cb",
-            function() require("diffview.actions").conflict_choose "base" end,
-            { desc = "Choose the BASE version of a conflict" },
-          },
-          {
-            "n",
-            "<leader>ca",
-            function() require("diffview.actions").conflict_choose "all" end,
-            { desc = "Choose all the versions of a conflict" },
-          },
-          {
-            "n",
-            "<leader>cO",
-            function() require("diffview.actions").conflict_choose_all "ours" end,
-            { desc = "Choose the OURS version of a conflict for the whole file" },
-          },
-          {
-            "n",
-            "<leader>cT",
-            function() require("diffview.actions").conflict_choose_all "theirs" end,
-            { desc = "Choose the THEIRS version of a conflict for the whole file" },
-          },
-          {
-            "n",
-            "<leader>cB",
-            function() require("diffview.actions").conflict_choose_all "base" end,
-            { desc = "Choose the BASE version of a conflict for the whole file" },
-          },
-          {
-            "n",
-            "<leader>cA",
-            function() require("diffview.actions").conflict_choose_all "all" end,
-            { desc = "Choose all the versions of a conflict for the whole file" },
-          },
+          { "n", "]b", actions.select_next_entry, { desc = "Next file" } },
+          { "n", "[b", actions.select_prev_entry, { desc = "Previous file" } },
         },
         diff2 = {
           -- Mappings in 2-way diff layouts
-          { "n", "?", function() require("diffview.actions").help { "view", "diff2" } end, { desc = "Show help" } },
+          { "n", "?", actions.help { "view", "diff2" }, { desc = "Show help" } },
         },
         diff3 = {
-          { "n", "?", function() require("diffview.actions").help { "view", "diff3" } end, { desc = "Show help" } },
-          -- Conflict resolution in 3-way diff
-          {
-            { "n", "x" },
-            "2do",
-            function() require("diffview.actions").diffget "ours" end,
-            { desc = "Get from OURS" },
-          },
-          {
-            { "n", "x" },
-            "3do",
-            function() require("diffview.actions").diffget "theirs" end,
-            { desc = "Get from THEIRS" },
-          },
+          { "n", "?", actions.help { "view", "diff3" }, { desc = "Show help" } },
+          { { "n", "x" }, "2do", actions.diffget "ours", { desc = "Diffget the cursor hunk from OURS" } },
+          { { "n", "x" }, "3do", actions.diffget "theirs", { desc = "Diffget the cursor hunk from THEIRS" } },
+          -- Conflict resolution
+          { "n", "[x",          actions.prev_conflict,                  { desc = "Jump to the previous conflict marker" } },
+          { "n", "]x",          actions.next_conflict,                  { desc = "Jump to the next conflict marker" } },
+          { "n", "<leader>co",  actions.conflict_choose("ours"),        { desc = "Choose the OURS version of a conflict" } },
+          { "n", "<leader>ct",  actions.conflict_choose("theirs"),      { desc = "Choose the THEIRS version of a conflict" } },
+          { "n", "<leader>cb",  actions.conflict_choose("base"),        { desc = "Choose the BASE version of a conflict" } },
+          { "n", "<leader>ca",  actions.conflict_choose("all"),         { desc = "Choose all the versions of a conflict" } },
+          { "n", "dx",          actions.conflict_choose("none"),        { desc = "Delete the conflict region" } },
+          { "n", "<leader>cO",  actions.conflict_choose_all("ours"),    { desc = "Choose the OURS version of a conflict for the whole file" } },
+          { "n", "<leader>cT",  actions.conflict_choose_all("theirs"),  { desc = "Choose the THEIRS version of a conflict for the whole file" } },
+          { "n", "<leader>cB",  actions.conflict_choose_all("base"),    { desc = "Choose the BASE version of a conflict for the whole file" } },
+          { "n", "<leader>cA",  actions.conflict_choose_all("all"),     { desc = "Choose all the versions of a conflict for the whole file" } },
+          { "n", "dX",          actions.conflict_choose_all("none"),    { desc = "Delete the conflict region for the whole file" } },
+          { "n", "<leader>cso", actions.conflict_choose_side("ours"),   { desc = "Replace the MERGED buffer with the entire OURS side" } },
+          { "n", "<leader>cst", actions.conflict_choose_side("theirs"), { desc = "Replace the MERGED buffer with the entire THEIRS side" } },
+          { "n", "<leader>csb", actions.conflict_choose_side("base"),   { desc = "Replace the MERGED buffer with the entire BASE side" } },
         },
         file_panel = {
           { "n", "?", function() require("diffview.actions").help "file_panel" end, { desc = "Show help" } },
@@ -376,7 +320,7 @@ return {
           { "n", "y", function() require("diffview.actions").copy_hash() end, { desc = "Copy commit hash" } },
           { "n", "L", function() require("diffview.actions").open_commit_log() end, { desc = "Show commit details" } },
         },
-      },
-    },
+      }
+    end,
   },
 }
